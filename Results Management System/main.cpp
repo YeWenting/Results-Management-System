@@ -7,9 +7,37 @@
 //
 
 #include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
 
-int main(int argc, const char * argv[]) {
+using namespace std;
+
+class A
+{
+public:
+    A(){value = 0; }
+    ~A(){cout<<"kobe"<<endl;}
+
+private:
+    int value;
+};
+
+void fuck()
+{
+//    A *pA = new A;
+//    return;
+}
+
+int main(int argc, const char * argv[])
+{
     // insert code here...
-    std::cout << "Hello, World!\n";
+//    fuck();
+//    A a;
+    vector <vector <int> > a(0);
+    a = vector<vector<int> > (3, vector<int>(4));
+
+    
+    copy(a.begin(), a.end(), ostream_iterator<int>(cout, " "));
     return 0;
 }
