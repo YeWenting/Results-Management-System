@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		580E59551CF981C50071F240 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 580E59541CF981C50071F240 /* main.cpp */; };
+		580E595D1CFAD7880071F240 /* person.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 580E595B1CFAD7880071F240 /* person.cpp */; };
+		580E59601CFAE5A80071F240 /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 580E595E1CFAE5A80071F240 /* system.cpp */; };
+		580E59641CFAF00A0071F240 /* course.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 580E59621CFAF00A0071F240 /* course.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +28,13 @@
 /* Begin PBXFileReference section */
 		580E59511CF981C50071F240 /* Results Management System */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Results Management System"; sourceTree = BUILT_PRODUCTS_DIR; };
 		580E59541CF981C50071F240 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		580E595B1CFAD7880071F240 /* person.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = person.cpp; sourceTree = "<group>"; };
+		580E595C1CFAD7880071F240 /* person.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = person.hpp; sourceTree = "<group>"; };
+		580E595E1CFAE5A80071F240 /* system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = system.cpp; sourceTree = "<group>"; };
+		580E595F1CFAE5A80071F240 /* system.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = system.hpp; sourceTree = "<group>"; };
+		580E59611CFAE6D60071F240 /* global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = global.h; sourceTree = "<group>"; };
+		580E59621CFAF00A0071F240 /* course.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = course.cpp; sourceTree = "<group>"; };
+		580E59631CFAF00A0071F240 /* course.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = course.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +68,13 @@
 			isa = PBXGroup;
 			children = (
 				580E59541CF981C50071F240 /* main.cpp */,
+				580E59611CFAE6D60071F240 /* global.h */,
+				580E595B1CFAD7880071F240 /* person.cpp */,
+				580E595C1CFAD7880071F240 /* person.hpp */,
+				580E595E1CFAE5A80071F240 /* system.cpp */,
+				580E595F1CFAE5A80071F240 /* system.hpp */,
+				580E59621CFAF00A0071F240 /* course.cpp */,
+				580E59631CFAF00A0071F240 /* course.hpp */,
 			);
 			path = "Results Management System";
 			sourceTree = "<group>";
@@ -118,7 +135,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				580E59641CFAF00A0071F240 /* course.cpp in Sources */,
+				580E595D1CFAD7880071F240 /* person.cpp in Sources */,
 				580E59551CF981C50071F240 /* main.cpp in Sources */,
+				580E59601CFAE5A80071F240 /* system.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,7 +150,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -148,7 +168,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -174,7 +194,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -192,7 +212,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -239,6 +259,7 @@
 				580E595A1CF981C50071F240 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

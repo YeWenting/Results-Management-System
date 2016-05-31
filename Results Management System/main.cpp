@@ -10,18 +10,9 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
-using namespace std;
-
-class A
-{
-public:
-    A(){value = 0; }
-    ~A(){cout<<"kobe"<<endl;}
-
-private:
-    int value;
-};
+#include "system.hpp"
 
 void fuck()
 {
@@ -29,15 +20,33 @@ void fuck()
 //    return;
 }
 
+using std::unique_ptr;
+
 int main(int argc, const char * argv[])
 {
-    // insert code here...
-//    fuck();
-//    A a;
-    vector <vector <int> > a(0);
-    a = vector<vector<int> > (3, vector<int>(4));
-
+    Result_system &system = Result_system::get_instance();
     
-    copy(a.begin(), a.end(), ostream_iterator<int>(cout, " "));
+//    unsigned char status = 0;
+//    while (OK)
+//    {
+//        unsigned short input;
+//        std::cin >> input
+//        switch (status) of
+//        {
+//        case 0:
+//            
+//        }
+//    }
+    Person_ptr base = system.get_person(2014211519);
+    Student_ptr s = std::dynamic_pointer_cast<Student>(base);
+    s->enroll_course();
+    
+//    int x;
+//    char ch;
+//    using std::cin;
+//    std::cin >> x;
+//    std::cin.ignore();
+//    cin >> ch;
+//    std::cout << ch << std::endl;
     return 0;
 }

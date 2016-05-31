@@ -10,39 +10,68 @@
 #define people_hpp
 
 #include <stdio.h>
+#include <string>
+#include <vector>
+
+class Student;
+class Teacher;
 
 class Person
 {
+friend std::istream &operator>>(std::istream&, Student&);
+friend std::istream &operator>>(std::istream&, Teacher&);
+
 public:
+    typedef size_t seq ;
     Person() = default;
-    Person(const size_t& i, const std::string &n, const std::string &cl, const unsigned int &cla, std::vector <size_t> cou, const std::string &pa) : id(i), name(n), classNum(cla), college(cl), courseNum(cou), password(pa) {};
+    Person(const seq& i, const std::string &n, const std::string &cl, std::vector <seq> &co, const std::string &pa):
+        id(i), name(n), college(cl), course(co), password(pa) {};
     ~Person() = default;
-    virtual display_info() = 0;
-    virtual display_course() = 0;
+    virtual const Person &display_info() = 0;
+    virtual const Person &display_course() = 0;
+    bool authorize(const std::string &);
+    seq get_id() { return id; };
+    std::string get_name() { return name; };        //For debug
     
 private:
-    std::size_t id = 0;
-    unsigned int classNum = 0;
-    std::string name = "", college = "", password = "";
-    vector <size_t> courseNum{};
+    seq id = 0;
+    std::string name, college, password;
+
+protected:
+    std::vector <seq> course;
 };
+
 
 class Student: public Person
 {
+friend std::istream &operator>>(std::istream&, Student&);
+    
 public:
-    virtual display_info() override;
-    virtual display_course() override;
-    bool enroll_course(size_t);
+    Student() = default;
+    virtual const Person &display_info() override final;
+    virtual const Person &display_course() override final;
+    void enroll_course();
+    void cancel_course();
+    
 private:
+    unsigned int classNum = 0;
 };
+
 
 class Teacher: public Person
 {
+friend std::istream &operator>>(std::istream&, Teacher&);
+    
 public:
-    virtual display_info() override;
-    virtual display_course() override;
-    bool enroll_course(size_t);
-private:
+    Teacher() = default;
+    virtual const Person &display_info() override final;
+    virtual const Person &display_course() override final;
+    bool modify_score(const seq &, const seq &, const unsigned int &);  //course student score
+    
 };
 
+
+
 #endif /* people_hpp */
+
+
