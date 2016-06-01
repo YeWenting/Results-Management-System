@@ -19,7 +19,7 @@ class Course
 {
     friend std::istream& operator>>(std::istream&, Course&);
 public:
-    typedef size_t seq;
+    typedef long seq;
     typedef unsigned short score;
     Course() = default;
     virtual double get_gpa(const score&) const = 0;
