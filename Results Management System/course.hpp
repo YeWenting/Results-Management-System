@@ -27,6 +27,8 @@ public:
     virtual void enroll_student(const Person::seq&) = 0;
     const seq get_id() const { return id; };
     std::string get_name() const { return name; };
+    Person::seq get_teacher() const { return teacher; };
+    score get_credit() const { return credit; };
     virtual bool display(std::ostream &os, const int &x = 0) const = 0;
     score get_score(const Person::seq &x)
         {
@@ -43,11 +45,13 @@ public:
             else return 1;
         }
 
-protected:
+private:
     seq id = 0;
     std::string name;
     Person::seq teacher;
     score credit = 0;
+
+protected:
     std::map <seq, score> studentScore;
 };
 

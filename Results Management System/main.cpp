@@ -24,7 +24,7 @@ using std::unique_ptr;
 
 int main(int argc, const char * argv[])
 {
-    std::shared_ptr<Result_system> system = Result_system::get_instance();
+    Result_system &system = Result_system::get_instance();
     
 //    unsigned char status = 0;
 //    while (OK)
@@ -42,10 +42,10 @@ int main(int argc, const char * argv[])
 ////    s->enroll_course();
 //    t->display_info(std::cout);
     
-    Person_ptr p2 = system->get_person(2014211519);
-    Student_ptr s = std::dynamic_pointer_cast<Student>(p2);
-    s->display_info(std::cout);
-    s->display_course(std::cout);
+//    Person_ptr p2 = system->get_person(2014211519);
+//    Student_ptr s = std::dynamic_pointer_cast<Student>(p2);
+//    s->display_info(std::cout);
+//    s->display_course(std::cout);
     
     
 //    int x;
@@ -55,5 +55,6 @@ int main(int argc, const char * argv[])
 //    std::cin.ignore();
 //    cin >> ch;
 //    std::cout << ch << std::endl;
+    std::cout << 1 << std::endl;
     return 0;
 }

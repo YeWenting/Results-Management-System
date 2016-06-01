@@ -52,12 +52,12 @@ double Require_course::get_gpa(const score& x) const
     
     score sum = std::accumulate(studentScore.begin(), studentScore.end(), 0,
                                 [](const score &a, pair<seq, score> b){ return a + b.second; });
-    return (double)studentScore.size() * x * credit / sum;
+    return (double)studentScore.size() * x * get_credit() / sum;
 }
 
 double Elective_course::get_gpa(const score& x) const
 {
-    return sqrt((double)x) / 10 * credit;
+    return sqrt((double)x) / 10 * get_credit();
 }
 
 bool Require_course::display(std::ostream &os, const int &x) const
@@ -66,7 +66,7 @@ bool Require_course::display(std::ostream &os, const int &x) const
     if (x == NO_REQUIRED) return WRONG;
     else
     {
-        os << id << '\t' << name << "\tRequired\t" << teacher << '\t' << credit;
+        os << get_id() << '\t' << get_name() << "\tRequired\t" << get_teacher() << '\t' << get_credit();
         return OK;
     }
 }
@@ -75,7 +75,7 @@ bool Elective_course::display(std::ostream &os, const int &x) const
 {
     using std::endl;
     
-    os << id << '\t' << name << "\tElective\t" << teacher << '\t' << credit;
+    os << get_id() << '\t' << get_name() << "\tElective\t" << get_teacher() << '\t' << get_credit();
     return OK;
 }
 

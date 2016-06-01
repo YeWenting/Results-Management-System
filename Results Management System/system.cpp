@@ -62,7 +62,23 @@ Result_system::Result_system()
         auto temp = std::make_shared<Elective_course>();
         elective_file >> *temp;
         num_to_course.insert(make_pair(temp->get_id(), temp));
+        num_to_elective.insert(make_pair(temp->get_id(), temp));
     }
+    
+    std::cout << "haha" << std::endl;
+    for (auto i = num_to_elective.begin(); i != num_to_elective.end(); ++i)
+    {
+        std::cout << i->first << ' ' << i->second->get_name() << std::endl;
+    }
+}
+
+Result_system::~Result_system()
+{
+    std::cout << 2 << std::endl;
+    if (m_instance == nullptr) return;
+    num_to_person.clear();
+    num_to_course.clear();
+    num_to_elective.clear();
 }
 
 //inline Result_system::Garbo::~Garbo()
@@ -82,14 +98,15 @@ void Result_system::print_available_course(const Student &stu, std::ostream &os)
 {
     using std::endl;
     
+    
     os << "Here are all of the elective courses:" << endl;
-    for (auto u : num_to_course)
+    for (auto u = num_to_elective.begin(); u != num_to_elective.end(); ++u)
     {
-        if (u.second->display(os, NO_REQUIRED))
+        //if (u->second->display(os))
         {
-            os << '\t';
-            if (u.second->in_course(stu.get_id())) os << "Attended" << endl;
-            else os << "Available" << endl;
+        //    os << '\t';
+           // if (u->second->in_course(stu.get_id())) os << "Attended" << endl;
+           // else os << "Available" << endl;
         }
     }
     os << endl;

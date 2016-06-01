@@ -45,6 +45,7 @@ friend std::istream &operator>>(std::istream&, Student&);
     
 public:
     Student() = default;
+    ~Student() = default;
     virtual const Person &display_info(std::ostream&) override final;
     void enroll_course();
     void cancel_course();
@@ -64,8 +65,6 @@ public:
     bool modify_score(const seq &, const seq &, const unsigned int &);  //course student score
     
 };
-
-
 
 #endif /* people_hpp */
 

@@ -24,11 +24,12 @@ private:
     static std::unique_ptr<Result_system> m_instance;
 
 public:
-    static std::shared_ptr<Result_system> get_instance()      //必须加引用
+    ~Result_system();
+    static Result_system& get_instance()      //必须加引用
     {
         if (m_instance == nullptr)
             m_instance.reset(new Result_system);
-        return std::shared_ptr<Result_system>(m_instance.get());
+        return *m_instance;
     }
     
 public:
@@ -38,6 +39,7 @@ public:
 private:
     std::map <Person::seq, Person_ptr> num_to_person;
     std::map <Course::seq, Course_ptr> num_to_course;
+    std::map <Course::seq, Elective_ptr> num_to_elective;
 };
 
 //添加课程记得判断存不存在
