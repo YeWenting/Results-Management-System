@@ -60,7 +60,7 @@ double Elective_course::get_gpa(const score& x) const
     return sqrt((double)x) / 10 * credit;
 }
 
-inline bool Require_course::display(std::ostream &os, const int &x) const
+bool Require_course::display(std::ostream &os, const int &x) const
 {
     using std::endl;
     if (x == NO_REQUIRED) return WRONG;
@@ -71,7 +71,7 @@ inline bool Require_course::display(std::ostream &os, const int &x) const
     }
 }
 
-inline bool Elective_course::display(std::ostream &os, const int &x) const
+bool Elective_course::display(std::ostream &os, const int &x) const
 {
     using std::endl;
     

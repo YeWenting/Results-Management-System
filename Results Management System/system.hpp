@@ -24,11 +24,11 @@ private:
     static std::unique_ptr<Result_system> m_instance;
 
 public:
-    static Result_system& get_instance()      //必须加引用
+    static std::shared_ptr<Result_system> get_instance()      //必须加引用
     {
         if (m_instance == nullptr)
             m_instance.reset(new Result_system);
-        return *m_instance;
+        return std::shared_ptr<Result_system>(m_instance.get());
     }
     
 public:

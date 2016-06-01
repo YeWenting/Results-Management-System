@@ -26,6 +26,6 @@ typedef std::shared_ptr<Person> Person_ptr;
 typedef std::shared_ptr<Student> Student_ptr;
 typedef std::shared_ptr<Teacher> Teacher_ptr;
 typedef std::shared_ptr<Course> Course_ptr;
-typedef std::unique_ptr<Result_system> System_ptr;
+typedef std::shared_ptr<Result_system> System_ptr;
 
 #endif /* global_h */

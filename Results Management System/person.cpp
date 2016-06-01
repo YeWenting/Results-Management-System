@@ -65,7 +65,7 @@ void Student::enroll_course()
     using std::cin;
     using std::cout;
     using std::endl;
-    Result_system &system = Result_system::get_instance();
+    System_ptr system = Result_system::get_instance();
     Course::seq courseNum;
     
     //用课程的信息进行验证 考虑课程信息保存在远端 防止用户欺骗
@@ -73,7 +73,7 @@ void Student::enroll_course()
     {
         try
         {
-            Course_ptr enrollCourse = system.get_course(courseNum);
+            Course_ptr enrollCourse = system->get_course(courseNum);
             enrollCourse->enroll_student(get_id());
             course.push_back(enrollCourse->get_id());
             cout << "You attend the " << enrollCourse->get_name() << " course successfully." << endl;
@@ -95,10 +95,10 @@ const Person& Student::display_info(std::ostream &os)
     using std::endl;
     os << "Hello student " << name << ", here is your basic info:)\nID: " << id << "\nClass: " << classNum << "\nCollege: " << college << "\nCourses to attend: " << endl;
     
-    Result_system &system = Result_system::get_instance();
+    System_ptr system = Result_system::get_instance();
     for (auto u : course)
     {
-        Course_ptr myCourse = system.get_course(u);
+        Course_ptr myCourse = system->get_course(u);
         myCourse->display(os);
         os << '\t' << myCourse->get_score(this->id) << endl;
     }
@@ -108,9 +108,9 @@ const Person& Student::display_info(std::ostream &os)
 
 const Person& Student::display_course(std::ostream &os) const
 {
-    Result_system &system = Result_system::get_instance();
+    System_ptr system = Result_system::get_instance();
     
-    system.print_available_course(*this, std::cout);
+    system->print_available_course(*this, std::cout);
     return *this;
 }
 
@@ -120,10 +120,10 @@ const Person& Teacher::display_info(std::ostream &os)
     
     os << "Dear Porf." << name << ", here is your basic info:)\nID: " << id << "\nCollege: " << college << "\nCourses to teach: " << endl;
     
-    Result_system &system = Result_system::get_instance();
+    System_ptr system = Result_system::get_instance();
     for (auto u : course)
     {
-        Course_ptr myCourse = system.get_course(u);
+        Course_ptr myCourse = system->get_course(u);
         myCourse->display(os);
         os << '\t' << myCourse->get_student_num() << endl;
     }
