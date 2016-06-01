@@ -78,6 +78,23 @@ Person_ptr Result_system::get_person(const Person::seq &personID)
     return person_it->second;
 }
 
+void Result_system::print_available_course(const Student &stu, std::ostream &os)
+{
+    using std::endl;
+    
+    os << "Here are all of the elective courses:" << endl;
+    for (auto u : num_to_course)
+    {
+        if (u.second->display(os, NO_REQUIRED))
+        {
+            os << '\t';
+            if (u.second->in_course(stu.get_id())) os << "Attended" << endl;
+            else os << "Available" << endl;
+        }
+    }
+    os << endl;
+}
+
 Course_ptr Result_system::get_course(const Course::seq &num)
 {
     auto course_it = num_to_course.find(num);

@@ -34,6 +34,7 @@ public:
 public:
     Person_ptr get_person(const Person::seq &);
     Course_ptr get_course(const Course::seq &);
+    void print_available_course(const Student&, std::ostream &);
 private:
     std::map <Person::seq, Person_ptr> num_to_person;
     std::map <Course::seq, Course_ptr> num_to_course;

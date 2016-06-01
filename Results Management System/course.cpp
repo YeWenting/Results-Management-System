@@ -60,14 +60,23 @@ double Elective_course::get_gpa(const score& x) const
     return sqrt((double)x) / 10 * credit;
 }
 
-void Require_course::do_display(std::ostream &os) const
+inline bool Require_course::display(std::ostream &os, const int &x) const
 {
-    
+    using std::endl;
+    if (x == NO_REQUIRED) return WRONG;
+    else
+    {
+        os << id << '\t' << name << "\tRequired\t" << teacher << '\t' << credit;
+        return OK;
+    }
 }
 
-void Elective_course::do_display(std::ostream &os) const
+inline bool Elective_course::display(std::ostream &os, const int &x) const
 {
+    using std::endl;
     
+    os << id << '\t' << name << "\tElective\t" << teacher << '\t' << credit;
+    return OK;
 }
 
 inline void Require_course::throw_student(const Person::seq &x)

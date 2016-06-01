@@ -9,16 +9,23 @@
 #ifndef global_h
 #define global_h
 
-#include "course.hpp"
 #include <memory>
 
 constexpr int OK = 1;
 constexpr int WRONG = 0;
 constexpr unsigned short int NO_GREADE = 65535;
+constexpr unsigned char NO_REQUIRED = 1;
+
+class Person;
+class Student;
+class Teacher;
+class Course;
+class Result_system;
 
 typedef std::shared_ptr<Person> Person_ptr;
 typedef std::shared_ptr<Student> Student_ptr;
 typedef std::shared_ptr<Teacher> Teacher_ptr;
 typedef std::shared_ptr<Course> Course_ptr;
+typedef std::unique_ptr<Result_system> System_ptr;
 
 #endif /* global_h */

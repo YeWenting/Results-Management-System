@@ -22,22 +22,31 @@ public:
     typedef size_t seq;
     typedef unsigned short score;
     Course() = default;
-    Course &display(std::ostream &os)
-        { do_display(os); return *this; };
-    const Course &display(std::ostream &os) const
-        { do_display(os); return *this; };
     virtual double get_gpa(const score&) const = 0;
     virtual void throw_student(const Person::seq&) = 0;
     virtual void enroll_student(const Person::seq&) = 0;
-    seq get_id() const { return id; };
+    const seq get_id() const { return id; };
     std::string get_name() const { return name; };
-private:
+    virtual bool display(std::ostream &os, const int &x = 0) const = 0;
+    score get_score(const Person::seq &x)
+        {
+            auto stu_it = studentScore.find(x);
+            if (stu_it == studentScore.end())
+                throw std::range_error("The student is not exist.");
+            return stu_it->second;
+        }
+    size_t get_student_num() const { return studentScore.size(); };
+    bool in_course(const Person::seq &x) const
+        {
+            auto stu_it = studentScore.find(x);
+            if (stu_it == studentScore.end()) return 0;
+            else return 1;
+        }
+
+protected:
     seq id = 0;
     std::string name;
     Person::seq teacher;
-    virtual void do_display(std::ostream &os) const = 0;
-    
-protected:
     score credit = 0;
     std::map <seq, score> studentScore;
 };
@@ -48,8 +57,7 @@ public:
     virtual double get_gpa(const score&) const override final;
     virtual void throw_student(const Person::seq&) override final;
     virtual void enroll_student(const Person::seq&) override final;
-private:
-    virtual void do_display(std::ostream &os) const override final;
+    virtual bool display(std::ostream &os, const int &x = 0) const override final;
 };
 
 class Elective_course : public Course
@@ -58,8 +66,7 @@ public:
     virtual double get_gpa(const score&) const override final;
     virtual void throw_student(const Person::seq&) override final;
     virtual void enroll_student(const Person::seq&) override final;
-private:
-    virtual void do_display(std::ostream &os) const override final;
+    virtual bool display(std::ostream &os, const int &x = 0) const override final;
 };
 
 #endif /* course_hpp */

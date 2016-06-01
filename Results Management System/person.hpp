@@ -27,17 +27,14 @@ public:
     Person(const seq& i, const std::string &n, const std::string &cl, std::vector <seq> &co, const std::string &pa):
         id(i), name(n), college(cl), course(co), password(pa) {};
     ~Person() = default;
-    virtual const Person &display_info() = 0;
-    virtual const Person &display_course() = 0;
+    virtual const Person &display_info(std::ostream&) = 0;
     bool authorize(const std::string &);
-    seq get_id() { return id; };
+    seq get_id() const { return id; };
     std::string get_name() { return name; };        //For debug
     
-private:
+protected:
     seq id = 0;
     std::string name, college, password;
-
-protected:
     std::vector <seq> course;
 };
 
@@ -48,11 +45,10 @@ friend std::istream &operator>>(std::istream&, Student&);
     
 public:
     Student() = default;
-    virtual const Person &display_info() override final;
-    virtual const Person &display_course() override final;
+    virtual const Person &display_info(std::ostream&) override final;
     void enroll_course();
     void cancel_course();
-    
+    const Person& display_course(std::ostream&) const;
 private:
     unsigned int classNum = 0;
 };
@@ -64,8 +60,7 @@ friend std::istream &operator>>(std::istream&, Teacher&);
     
 public:
     Teacher() = default;
-    virtual const Person &display_info() override final;
-    virtual const Person &display_course() override final;
+    virtual const Person &display_info(std::ostream&) override final;
     bool modify_score(const seq &, const seq &, const unsigned int &);  //course student score
     
 };

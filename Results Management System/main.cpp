@@ -37,9 +37,16 @@ int main(int argc, const char * argv[])
 //            
 //        }
 //    }
-    Person_ptr base = system.get_person(2014211519);
-    Student_ptr s = std::dynamic_pointer_cast<Student>(base);
-    s->enroll_course();
+//    Person_ptr p1 = system.get_person(2001007);
+//    Teacher_ptr t = std::dynamic_pointer_cast<Teacher>(p1);
+////    s->enroll_course();
+//    t->display_info(std::cout);
+    
+    Person_ptr p2 = system.get_person(2014211519);
+    Student_ptr s = std::dynamic_pointer_cast<Student>(p2);
+    s->display_info(std::cout);
+    s->display_course(std::cout);
+    
     
 //    int x;
 //    char ch;

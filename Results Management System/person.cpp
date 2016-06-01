@@ -36,7 +36,6 @@ std::istream &operator>> (std::istream &is, Student &p)
     getline(is, s);
     std::stringstream record(s);
     std::istream_iterator<Person::seq> in_iter(record), eof;
-    std::cout << s << std::endl;
     p.course = vector<Person::seq> (in_iter, eof);
     
     //判断输入是否成功
@@ -54,7 +53,6 @@ std::istream &operator>> (std::istream &is, Teacher &p)
     getline(is, s);
     std::stringstream record(s);
     std::istream_iterator<Person::seq> in_iter(record), eof;
-    std::cout << s << std::endl;
     p.course = vector<Person::seq> (in_iter, eof);
     
     //判断输入是否成功
@@ -92,27 +90,44 @@ void Student::enroll_course()
     }
 }
 
-const Person& Student::display_info()
+const Person& Student::display_info(std::ostream &os)
 {
+    using std::endl;
+    os << "Hello student " << name << ", here is your basic info:)\nID: " << id << "\nClass: " << classNum << "\nCollege: " << college << "\nCourses to attend: " << endl;
     
+    Result_system &system = Result_system::get_instance();
+    for (auto u : course)
+    {
+        Course_ptr myCourse = system.get_course(u);
+        myCourse->display(os);
+        os << '\t' << myCourse->get_score(this->id) << endl;
+    }
+    os << endl;
     return *this;
 }
 
-const Person& Student::display_course()
+const Person& Student::display_course(std::ostream &os) const
 {
+    Result_system &system = Result_system::get_instance();
     
+    system.print_available_course(*this, std::cout);
     return *this;
 }
 
-const Person& Teacher::display_info()
+const Person& Teacher::display_info(std::ostream &os)
 {
+    using std::endl;
     
-    return *this;
-}
-
-const Person& Teacher::display_course()
-{
+    os << "Dear Porf." << name << ", here is your basic info:)\nID: " << id << "\nCollege: " << college << "\nCourses to teach: " << endl;
     
+    Result_system &system = Result_system::get_instance();
+    for (auto u : course)
+    {
+        Course_ptr myCourse = system.get_course(u);
+        myCourse->display(os);
+        os << '\t' << myCourse->get_student_num() << endl;
+    }
+    os << endl;
     return *this;
 }
 
