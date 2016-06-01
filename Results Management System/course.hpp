@@ -30,12 +30,20 @@ public:
     Person::seq get_teacher() const { return teacher; };
     score get_credit() const { return credit; };
     virtual bool display(std::ostream &os, const int &x = 0) const = 0;
+    void print_score_table(std::ostream&) const;
     score get_score(const Person::seq &x)
         {
             auto stu_it = studentScore.find(x);
             if (stu_it == studentScore.end())
-                throw std::range_error("The student is not exist.");
+                throw std::invalid_argument("The student is not exist.");
             return stu_it->second;
+        }
+    void change_score(const Person::seq &x, const score &y)
+        {
+            auto stu_it = studentScore.find(x);
+            if (stu_it == studentScore.end())
+                throw std::invalid_argument("The student is not exist.");
+            stu_it->second = y;
         }
     size_t get_student_num() const { return studentScore.size(); };
     bool in_course(const Person::seq &x) const
@@ -45,13 +53,11 @@ public:
             else return 1;
         }
 
-private:
+protected:
     seq id = 0;
     std::string name;
     Person::seq teacher;
     score credit = 0;
-
-protected:
     std::map <seq, score> studentScore;
 };
 

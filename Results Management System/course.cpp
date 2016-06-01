@@ -17,6 +17,7 @@
 #include <cmath>
 
 #include "course.hpp"
+#include "system.hpp"
 #include "global.h"
 
 using std::string;
@@ -63,10 +64,12 @@ double Elective_course::get_gpa(const score& x) const
 bool Require_course::display(std::ostream &os, const int &x) const
 {
     using std::endl;
+    Result_system &system = Result_system::get_instance();
+    
     if (x == NO_REQUIRED) return WRONG;
     else
     {
-        os << get_id() << '\t' << get_name() << "\tRequired\t" << get_teacher() << '\t' << get_credit();
+        os << get_id() << '\t' << get_name() << "\tRequired\t" << system.get_person(get_teacher())->get_name() << '\t' << get_credit();
         return OK;
     }
 }
@@ -74,8 +77,9 @@ bool Require_course::display(std::ostream &os, const int &x) const
 bool Elective_course::display(std::ostream &os, const int &x) const
 {
     using std::endl;
+    Result_system &system = Result_system::get_instance();
     
-    os << get_id() << '\t' << get_name() << "\tElective\t" << get_teacher() << '\t' << get_credit();
+    os << get_id() << '\t' << get_name() << "\tElective\t" << system.get_person(get_teacher())->get_name() << '\t' << get_credit();
     return OK;
 }
 
@@ -103,4 +107,16 @@ inline void Elective_course::enroll_student(const Person::seq &x)
     if (stu_it != studentScore.end())
         throw std::invalid_argument("You have already been in this class.");
     studentScore.insert(std::make_pair(x, NO_GREADE));
+}
+
+void Course::print_score_table(std::ostream &os) const
+{
+    Result_system &system = Result_system::get_instance();
+    
+    for (auto u : studentScore)
+    {
+        Person_ptr p = system.get_person(u.first);
+        Student_ptr s = std::dynamic_pointer_cast<Student>(p);
+        os << *s << u.second << std::endl;
+    }
 }

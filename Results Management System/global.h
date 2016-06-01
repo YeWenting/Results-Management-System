@@ -15,6 +15,8 @@ constexpr int OK = 1;
 constexpr int WRONG = 0;
 constexpr unsigned short int NO_GREADE = 65535;
 constexpr unsigned char NO_REQUIRED = 1;
+constexpr unsigned short int MAX_SCORE = 100;
+constexpr unsigned short int MIN_SCORE = 0;
 
 class Person;
 class Student;
@@ -27,7 +29,5 @@ typedef std::shared_ptr<Person> Person_ptr;
 typedef std::shared_ptr<Student> Student_ptr;
 typedef std::shared_ptr<Teacher> Teacher_ptr;
 typedef std::shared_ptr<Course> Course_ptr;
-typedef std::shared_ptr<Elective_course> Elective_ptr;
-typedef std::shared_ptr<Result_system> System_ptr;
 
 #endif /* global_h */

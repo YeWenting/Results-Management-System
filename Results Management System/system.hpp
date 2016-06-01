@@ -39,7 +39,6 @@ public:
 private:
     std::map <Person::seq, Person_ptr> num_to_person;
     std::map <Course::seq, Course_ptr> num_to_course;
-    std::map <Course::seq, Elective_ptr> num_to_elective;
 };
 
 //添加课程记得判断存不存在

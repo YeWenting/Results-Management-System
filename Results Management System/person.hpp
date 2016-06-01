@@ -18,9 +18,6 @@ class Teacher;
 
 class Person
 {
-friend std::istream &operator>>(std::istream&, Student&);
-friend std::istream &operator>>(std::istream&, Teacher&);
-
 public:
     typedef size_t seq ;
     Person() = default;
@@ -42,6 +39,7 @@ protected:
 class Student: public Person
 {
 friend std::istream &operator>>(std::istream&, Student&);
+friend std::ostream& operator<<(std::ostream&, const Student&);
     
 public:
     Student() = default;
@@ -58,12 +56,14 @@ private:
 class Teacher: public Person
 {
 friend std::istream &operator>>(std::istream&, Teacher&);
+friend std::ostream& operator<<(std::ostream&, const Teacher&);
     
 public:
     Teacher() = default;
     virtual const Person &display_info(std::ostream&) override final;
-    bool modify_score(const seq &, const seq &, const unsigned int &);  //course student score
-    
+    void modify_score(std::istream &, std::ostream &);  //course student score
+    void display_score(std::ostream &);
+    void check_score(std::istream &, std::ostream &) const;
 };
 
 #endif /* people_hpp */
