@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <iterator>
 
 #include "person.hpp"
 #include "global.h"
@@ -38,8 +39,6 @@ std::istream &operator>> (std::istream &is, Student &p)
     std::istream_iterator<Person::seq> in_iter(record), eof;
     p.course = vector<Person::seq> (in_iter, eof);
     
-    //判断输入是否成功
-    
     return is;
 }
 
@@ -54,8 +53,6 @@ std::istream &operator>> (std::istream &is, Teacher &p)
     std::stringstream record(s);
     std::istream_iterator<Person::seq> in_iter(record), eof;
     p.course = vector<Person::seq> (in_iter, eof);
-    
-    //判断输入是否成功
     
     return is;
 }
@@ -72,6 +69,20 @@ std::ostream& operator<<(std::ostream &os, const Teacher &t)
     return os;
 }
 
+Student::~Student()
+{
+    using std::endl;
+    
+    if (id != 0)
+    {
+        static std::ofstream out_file("student.txt");
+        out_file << id << ' ' << password << ' ' << name << ' '  << college << ' ' << classNum << endl;
+        copy(course.begin(), course.end(), std::ostream_iterator<int>(out_file, " "));
+        out_file << endl;
+    }
+    course.clear();
+}
+
 void Student::enroll_course()
 {
     using std::cin;
@@ -80,7 +91,6 @@ void Student::enroll_course()
     Result_system &system = Result_system::get_instance();
     Course::seq courseNum;
     
-    //用课程的信息进行验证 考虑课程信息保存在远端 防止用户欺骗
     cout << "Please input the course ID\n" <<endl;
     while (cin >> courseNum)
     {
@@ -105,12 +115,56 @@ void Student::enroll_course()
     }
 }
 
-const Person& Student::display_info(std::ostream &os)
+void Student::cancel_course()
+{
+    using std::cin;
+    using std::cout;
+    using std::endl;
+    Result_system &system = Result_system::get_instance();
+    Course::seq courseNum;
+    
+    cout << "Please input the course ID\n" <<endl;
+    while (cin >> courseNum)
+    {
+        try
+        {
+            auto course_it = find(course.begin(), course.end(), courseNum);
+            if (course_it == course.end())
+                throw std::invalid_argument("You are not attending this class!");
+            
+            Course_ptr cancelCourse = system.get_course(courseNum);
+            cancelCourse->throw_student(get_id());
+            course.erase(course_it);
+            cout << "You cancel the " << cancelCourse->get_name() << " course successfully." << endl;
+            break;
+        }
+        catch (std::invalid_argument err)
+        {
+            cout << err.what() << "\nTry again? Enter y or n" <<endl;
+            char c;
+            cin.clear();
+            cin >> c;
+            if (!cin || c == 'n') break;
+            cout << "Please input the course ID\n" <<endl;
+            continue;
+        }
+    }
+}
+
+const Person& Student::display_info(std::ostream &os, const Score_mode &mode)
 {
     using std::endl;
     os << "\n\nHello student " << name << ", here is your basic info:)\nID: " << id << "\nClass: " << classNum << "\nCollege: " << college << "\nCourses to attend: " << endl;
     
     Result_system &system = Result_system::get_instance();
+    //输出基本信息
+    if (mode == INCREASE_BY_SCORE)
+        sort(course.begin(), course.end(), [&system, this](const seq &a, const seq &b)
+             { return system.get_course(a)->get_score(this->id) < system.get_course(b)->get_score(this->id); });
+    else
+        sort(course.begin(), course.end(), [&system, this](const seq &a, const seq &b)
+             { return system.get_course(b)->get_score(this->id) > system.get_course(a)->get_score(this->id); });
+    
     for (auto u : course)
     {
         Course_ptr myCourse = system.get_course(u);
@@ -129,7 +183,21 @@ const Person& Student::display_course(std::ostream &os) const
     return *this;
 }
 
-const Person& Teacher::display_info(std::ostream &os)
+Teacher::~Teacher()
+{
+    using std::endl;
+    
+    if (id != 0)
+    {
+        static std::ofstream out_file("teacher.txt");
+        out_file << id << ' ' << password << ' ' << name << ' '  << college << endl;
+        copy(course.begin(), course.end(), std::ostream_iterator<int>(out_file, " "));
+        out_file << endl;
+    }
+    course.clear();
+}
+
+const Person& Teacher::display_info(std::ostream &os, const Score_mode &mode)
 {
     using std::endl;
     
@@ -145,7 +213,6 @@ const Person& Teacher::display_info(std::ostream &os)
     os << endl;
     return *this;
 }
-
 
 //给课程 给student 给分数
 void Teacher::modify_score(std::istream &is, std::ostream &os)
@@ -174,7 +241,7 @@ void Teacher::modify_score(std::istream &is, std::ostream &os)
             //修改分数
             myCourse->change_score(student, newScore);
             os << "Change Successfully\nNew score table is:\n" << endl;
-            myCourse->print_score_table(std::cout);
+            myCourse->print_score_table(std::cout, INCREASE_BY_SCORE);
             break;
         }
         catch (std::invalid_argument err)
@@ -190,7 +257,7 @@ void Teacher::modify_score(std::istream &is, std::ostream &os)
     }
 }
 
-void Teacher::check_score(std::istream &is, std::ostream &os) const
+void Teacher::check_score(std::istream &is, std::ostream &os, const Score_mode &mode) const
 {
     using std::endl;
     Result_system & system = Result_system::get_instance();
@@ -204,7 +271,7 @@ void Teacher::check_score(std::istream &is, std::ostream &os) const
             Course_ptr printCourse = system.get_course(x);
             if (printCourse->get_teacher() != this->id)
                 throw std::invalid_argument("You do not teach this class");
-            printCourse->print_score_table(os);
+            printCourse->print_score_table(os, mode);
             break;
         }
         catch (std::invalid_argument err)

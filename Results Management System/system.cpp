@@ -33,14 +33,14 @@ Result_system::Result_system()
     {
         auto temp = std::make_shared<Student>();
         stu_file >> *temp;
-        num_to_person.insert(make_pair(temp->get_id(), temp));
+        if (stu_file) num_to_person.insert(make_pair(temp->get_id(), temp));
     }
     
     while (!tea_file.eof())
     {
         auto temp = std::make_shared<Teacher>();
         tea_file >> *temp;
-        num_to_person.insert(make_pair(temp->get_id(), temp));
+        if (tea_file) num_to_person.insert(make_pair(temp->get_id(), temp));
     }
     
     //teacher 多了一个
@@ -54,14 +54,14 @@ Result_system::Result_system()
     {
         auto temp = std::make_shared<Require_course>();
         require_file >> *temp;
-        num_to_course.insert(make_pair(temp->get_id(), temp));
+        if (require_file) num_to_course.insert(make_pair(temp->get_id(), temp));
     }
     
     while (!elective_file.eof())
     {
         auto temp = std::make_shared<Elective_course>();
         elective_file >> *temp;
-        num_to_course.insert(make_pair(temp->get_id(), temp));
+        if (elective_file) num_to_course.insert(make_pair(temp->get_id(), temp));
     }
     
 //    std::cout << "haha" << std::endl;

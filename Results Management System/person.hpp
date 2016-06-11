@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 
+#include "global.h"
+
 class Student;
 class Teacher;
 
@@ -23,12 +25,12 @@ public:
     Person() = default;
     Person(const seq& i, const std::string &n, const std::string &cl, std::vector <seq> &co, const std::string &pa):
         id(i), name(n), college(cl), course(co), password(pa) {};
-    ~Person() = default;
-    virtual const Person &display_info(std::ostream&) = 0;
-    bool authorize(const std::string &);
+    virtual ~Person() = default;
     seq get_id() const { return id; };
-    std::string get_name() { return name; };        //For debug
+    std::string get_name() { return name; };
     
+    bool authorize(const std::string &);
+    virtual const Person &display_info(std::ostream&, const Score_mode&) = 0;
 protected:
     seq id = 0;
     std::string name, college, password;
@@ -43,8 +45,9 @@ friend std::ostream& operator<<(std::ostream&, const Student&);
     
 public:
     Student() = default;
-    ~Student() = default;
-    virtual const Person &display_info(std::ostream&) override final;
+    virtual ~Student();
+    
+    virtual const Person &display_info(std::ostream&, const Score_mode&) override final;
     void enroll_course();
     void cancel_course();
     const Person& display_course(std::ostream&) const;
@@ -60,10 +63,11 @@ friend std::ostream& operator<<(std::ostream&, const Teacher&);
     
 public:
     Teacher() = default;
-    virtual const Person &display_info(std::ostream&) override final;
+    virtual ~Teacher();
+    virtual const Person &display_info(std::ostream&, const Score_mode&) override final;
+//    virtual void storage() override final;
     void modify_score(std::istream &, std::ostream &);  //course student score
-    void display_score(std::ostream &);
-    void check_score(std::istream &, std::ostream &) const;
+    void check_score(std::istream &, std::ostream &, const Score_mode&) const;
 };
 
 #endif /* people_hpp */

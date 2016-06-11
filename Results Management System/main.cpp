@@ -57,21 +57,24 @@ int main(int argc, const char * argv[])
                 tea_ptr = std::dynamic_pointer_cast<Teacher> (user_ptr);
             }
             
-            user_ptr->display_info(cout);
+            user_ptr->display_info(cout, INCREASE_BY_SCORE);
+//            user_ptr->display_info(cout, DECREASE_BY_SCORE);
+            
             
             if (userType == isStudent)
             {
-                cout << "\n1 to view the elective course that is available for you;\n2 to attend a course;\n3 to exit." << endl;
+                cout << "\n1 to view the elective course that is available for you;\n2 to attend a course;\n3 to cancel a course.\n4 to exit." << endl;
                 while (cin >> input)
                 {
                     if (input == 1)
-                        
                         system.print_available_course(*std_ptr, cout);
                     else if (input == 2)
                         std_ptr->enroll_course();
+                    else if (input == 3)
+                        std_ptr->cancel_course();
                     else break;
                     
-                    cout << "\n1 to view the elective course that is available for you;\n2 to attend a course;\n3 to exit." << endl;
+                    cout << "\n1 to view the elective course that is available for you;\n2 to attend a course;\n3 to cancel a course.\n4 to exit." << endl;
                 }
             }
             
@@ -81,7 +84,10 @@ int main(int argc, const char * argv[])
                 while (cin >> input)
                 {
                     if (input == 1)
-                        tea_ptr->check_score(cin, cout);
+                    {
+                        tea_ptr->check_score(cin, cout,INCREASE_BY_SCORE);
+                        tea_ptr->check_score(cin, cout,DECREASE_BY_SCORE);
+                    }
                     else if (input == 2)
                         tea_ptr->modify_score(cin, cout);
                     else break;

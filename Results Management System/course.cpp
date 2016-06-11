@@ -46,6 +46,21 @@ istream& operator>>(istream &is, Course &c)
     return is;
 }
 
+Require_course::~Require_course()
+{
+    using std::endl;
+    
+    if (id != 0)
+    {
+        static std::ofstream out_file("require_course.txt");
+        out_file << id << ' ' << name << ' ' << credit << ' ' << teacher << endl;
+        for (auto i = studentScore.begin(); i != studentScore.end(); i++)
+            out_file << i->first << " " << i->second << " ";
+        out_file << endl;
+    }
+    studentScore.clear();
+}
+
 double Require_course::get_gpa(const score& x) const
 {
     using seq = Course::seq;
@@ -54,6 +69,21 @@ double Require_course::get_gpa(const score& x) const
     score sum = std::accumulate(studentScore.begin(), studentScore.end(), 0,
                                 [](const score &a, pair<seq, score> b){ return a + b.second; });
     return (double)studentScore.size() * x * get_credit() / sum;
+}
+
+Elective_course::~Elective_course()
+{
+    using std::endl;
+    
+    if (id != 0)
+    {
+        static std::ofstream out_file("elective_course.txt");
+        out_file << id << ' ' << name << ' ' << credit << ' ' << teacher << endl;
+        for (auto i = studentScore.begin(); i != studentScore.end(); i++)
+            out_file << i->first << " " << i->second << " ";
+        out_file << endl;
+    }
+    studentScore.clear();
 }
 
 double Elective_course::get_gpa(const score& x) const
@@ -109,11 +139,19 @@ inline void Elective_course::enroll_student(const Person::seq &x)
     studentScore.insert(std::make_pair(x, NO_GREADE));
 }
 
-void Course::print_score_table(std::ostream &os) const
+void Course::print_score_table(std::ostream &os, const Score_mode &mode) const
 {
     Result_system &system = Result_system::get_instance();
+    std::vector <pair<seq, score> > myScore(studentScore.begin(), studentScore.end());
     
-    for (auto u : studentScore)
+    if (mode == INCREASE_BY_SCORE)
+        sort(myScore.begin(), myScore.end(), [](const pair<seq, score> &a, const pair<seq, score> &b)
+             { return a.second < b.second; });
+    else
+        sort(myScore.begin(), myScore.end(), [](const pair<seq, score> &a, const pair<seq, score> &b)
+             { return a.second > b.second; });
+    
+    for (auto u : myScore)
     {
         Person_ptr p = system.get_person(u.first);
         Student_ptr s = std::dynamic_pointer_cast<Student>(p);
