@@ -16,7 +16,7 @@
 #include "system.hpp"
 #include "person.hpp"
 #include "course.hpp"
-#include "global.h"
+#include "global.hpp"
 
 using std::string;
 using std::ifstream;
@@ -96,8 +96,7 @@ void Result_system::print_available_course(const Student &stu, std::ostream &os)
 {
     using std::endl;
     
-    
-    os << "Here are all of the elective courses:" << endl;
+    os << "\nHere are all of the elective courses:" << endl;
     for (auto u : num_to_course)
     {
         if (u.second->display(os, NO_REQUIRED))

@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-#include "global.h"
+#include "global.hpp"
 
 class Student;
 class Teacher;
@@ -30,7 +30,7 @@ public:
     std::string get_name() { return name; };
     
     bool authorize(const std::string &);
-    virtual const Person &display_info(std::ostream&, const Score_mode&) = 0;
+    virtual const Person &display_info(std::ostream&, const Score_mode& = INCREASE_BY_SCORE) = 0;
 protected:
     seq id = 0;
     std::string name, college, password;
@@ -47,7 +47,7 @@ public:
     Student() = default;
     virtual ~Student();
     
-    virtual const Person &display_info(std::ostream&, const Score_mode&) override final;
+    virtual const Person &display_info(std::ostream&, const Score_mode& = INCREASE_BY_SCORE) override final;
     void enroll_course();
     void cancel_course();
     const Person& display_course(std::ostream&) const;
@@ -64,7 +64,7 @@ friend std::ostream& operator<<(std::ostream&, const Teacher&);
 public:
     Teacher() = default;
     virtual ~Teacher();
-    virtual const Person &display_info(std::ostream&, const Score_mode&) override final;
+    virtual const Person &display_info(std::ostream&, const Score_mode& = INCREASE_BY_SCORE) override final;
 //    virtual void storage() override final;
     void modify_score(std::istream &, std::ostream &);  //course student score
     void check_score(std::istream &, std::ostream &, const Score_mode&) const;

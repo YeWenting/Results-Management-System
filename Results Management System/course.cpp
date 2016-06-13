@@ -18,7 +18,7 @@
 
 #include "course.hpp"
 #include "system.hpp"
-#include "global.h"
+#include "global.hpp"
 
 using std::string;
 using std::istream;
@@ -100,7 +100,7 @@ bool Require_course::display(std::ostream &os, const int &x) const
     else
     {
         os << get_id() << '\t' << get_name() << "\tRequired\t" << system.get_person(get_teacher())->get_name() << '\t' << get_credit();
-        return OK;
+        return RIGHT;
     }
 }
 
@@ -110,19 +110,19 @@ bool Elective_course::display(std::ostream &os, const int &x) const
     Result_system &system = Result_system::get_instance();
     
     os << get_id() << '\t' << get_name() << "\tElective\t" << system.get_person(get_teacher())->get_name() << '\t' << get_credit();
-    return OK;
+    return RIGHT;
 }
 
 inline void Require_course::throw_student(const Person::seq &x)
 {
-    throw std::logic_error("You must attend a REQUIRED course.");
+    throw std::invalid_argument("You must attend a REQUIRED course.");
 }
 
 inline void Elective_course::throw_student(const Person::seq &x)
 {
     auto stu_it = studentScore.find(x);
     if (stu_it == studentScore.end())
-        throw std::logic_error("You are not in this class.");
+        throw std::invalid_argument("You are not in this class.");
     studentScore.erase(stu_it);
 }
 

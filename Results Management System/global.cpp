@@ -2,25 +2,24 @@
 //  global.cpp
 //  Results Management System
 //
-//  Created by YeWenting. on 16/6/1.
+//  Created by YeWenting. on 16/6/13.
 //  Copyright © 2016年 School of Computer Science. All rights reserved.
 //
 
-#include <stdio.h>
-#include <stdexcept>
 #include <iostream>
+#include <stdio.h>
 
-#include "global.h"
+#include "global.hpp"
 
-void process_error(std::invalid_argument err, std::istream &is, std::ostream &os)
+bool process_error(std::invalid_argument err)
 {
-    using std::cout;
-    using std::endl;
-    using std::cin;
+    using namespace std;
     
+    cin.clear();
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     cout << err.what() << "\nTry again? Enter y or n" <<endl;
     char c;
     cin >> c;
-    if (!cin || c == 'n') break;
-    continue;
+    if (!cin || c == 'n') return WRONG;
+    else return RIGHT;
 }

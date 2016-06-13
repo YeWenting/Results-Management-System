@@ -12,9 +12,10 @@
 #include <iostream>
 #include <string>
 #include <iterator>
+#include <curses.h>
 
 #include "person.hpp"
-#include "global.h"
+#include "global.hpp"
 #include "course.hpp"
 #include "system.hpp"
 
@@ -24,7 +25,7 @@ using std::vector;
 bool Person::authorize(const std::string &s)
 {
     if (s != password) return WRONG;
-    else return OK;
+    else return RIGHT;
 }
 
 std::istream &operator>> (std::istream &is, Student &p)
@@ -91,11 +92,12 @@ void Student::enroll_course()
     Result_system &system = Result_system::get_instance();
     Course::seq courseNum;
     
-    cout << "Please input the course ID\n" <<endl;
-    while (cin >> courseNum)
+    while (true)
     {
         try
         {
+            cout << "Please input the course ID" <<endl;
+            cin >> courseNum;
             Course_ptr enrollCourse = system.get_course(courseNum);
             enrollCourse->enroll_student(get_id());
             course.push_back(enrollCourse->get_id());
@@ -104,13 +106,7 @@ void Student::enroll_course()
         }
         catch (std::invalid_argument err)
         {
-            cout << err.what() << "\nTry again? Enter y or n" <<endl;
-            char c;
-            cin.clear();
-            cin >> c;
-            if (!cin || c == 'n') break;
-            cout << "Please input the course ID\n" <<endl;
-            continue;
+            if (!process_error(err)) break;
         }
     }
 }
@@ -123,11 +119,13 @@ void Student::cancel_course()
     Result_system &system = Result_system::get_instance();
     Course::seq courseNum;
     
-    cout << "Please input the course ID\n" <<endl;
-    while (cin >> courseNum)
+    
+    while (true)
     {
         try
         {
+            cout << "Please input the course ID\n" <<endl;
+            cin >> courseNum;
             auto course_it = find(course.begin(), course.end(), courseNum);
             if (course_it == course.end())
                 throw std::invalid_argument("You are not attending this class!");
@@ -140,13 +138,7 @@ void Student::cancel_course()
         }
         catch (std::invalid_argument err)
         {
-            cout << err.what() << "\nTry again? Enter y or n" <<endl;
-            char c;
-            cin.clear();
-            cin >> c;
-            if (!cin || c == 'n') break;
-            cout << "Please input the course ID\n" <<endl;
-            continue;
+            if (!process_error(err)) break;
         }
     }
 }
@@ -154,7 +146,8 @@ void Student::cancel_course()
 const Person& Student::display_info(std::ostream &os, const Score_mode &mode)
 {
     using std::endl;
-    os << "\n\nHello student " << name << ", here is your basic info:)\nID: " << id << "\nClass: " << classNum << "\nCollege: " << college << "\nCourses to attend: " << endl;
+    system("clear");
+    os << "\n\nHello student " << name << ", here is your basic info:)\nName: " << name << "\nID: " << id << "\nClass: " << classNum << "\nCollege: " << college << "\nCourses to attend: " << endl;
     
     Result_system &system = Result_system::get_instance();
     //输出基本信息
@@ -163,7 +156,7 @@ const Person& Student::display_info(std::ostream &os, const Score_mode &mode)
              { return system.get_course(a)->get_score(this->id) < system.get_course(b)->get_score(this->id); });
     else
         sort(course.begin(), course.end(), [&system, this](const seq &a, const seq &b)
-             { return system.get_course(b)->get_score(this->id) > system.get_course(a)->get_score(this->id); });
+             { return system.get_course(a)->get_score(this->id) > system.get_course(b)->get_score(this->id); });
     
     for (auto u : course)
     {
@@ -201,6 +194,7 @@ const Person& Teacher::display_info(std::ostream &os, const Score_mode &mode)
 {
     using std::endl;
     
+    system("clear");
     os << "\n\nDear Porf." << name << ", here is your basic info:)\nID: " << id << "\nCollege: " << college << "\nCourses to teach: " << endl;
     
     Result_system & system = Result_system::get_instance();
@@ -223,36 +217,29 @@ void Teacher::modify_score(std::istream &is, std::ostream &os)
     Course::score  newScore = 0;
     Result_system & system = Result_system::get_instance();
     
-    os << "Please input the course ID, student ID, and new score:" << endl;
-    while (is >> course >> student >> newScore)
+    while (true)
     {
         try
         {
+            os << "Please input the course ID, student ID, and new score:" << endl;
+            is >> course >> student >> newScore;
+            //找课
             Course_ptr myCourse = system.get_course(course);
-            
             if (newScore > MAX_SCORE || !is.good())
                 throw std::invalid_argument("Input is incorrect!");
-            
             //判断授课老师是此人吗
             auto course_it = find(this->course.begin(), this->course.end(), myCourse->get_id());
             if (course_it == this->course.end())
                 throw std::invalid_argument("You do not teach this class");
-            
             //修改分数
             myCourse->change_score(student, newScore);
-            os << "Change Successfully\nNew score table is:\n" << endl;
+            os << "\nChange Successfully!\nNew score table is:\n" << endl;
             myCourse->print_score_table(std::cout, INCREASE_BY_SCORE);
             break;
         }
         catch (std::invalid_argument err)
         {
-            os << err.what() << "\nTry again? Enter y or n" <<endl;
-            char c;
-            is.clear();
-            is >> c;
-            if (!is || c == 'n') break;
-            os << "Please input the course ID, student ID, and new score:" << endl;
-            continue;
+            if (!process_error(err)) break;
         }
     }
 }
@@ -262,12 +249,13 @@ void Teacher::check_score(std::istream &is, std::ostream &os, const Score_mode &
     using std::endl;
     Result_system & system = Result_system::get_instance();
     
-    os << "Please enter the course ID" <<endl;
     Course::seq x;
-    while(is >> x)
+    while(true)
     {
         try
         {
+            os << "Please enter the course ID" <<endl;
+            is >> x;
             Course_ptr printCourse = system.get_course(x);
             if (printCourse->get_teacher() != this->id)
                 throw std::invalid_argument("You do not teach this class");
@@ -276,13 +264,7 @@ void Teacher::check_score(std::istream &is, std::ostream &os, const Score_mode &
         }
         catch (std::invalid_argument err)
         {
-            os << err.what() << "\nTry again? Enter y or n" <<endl;
-            char c;
-            is.clear();
-            is >> c;
-            if (!is || c == 'n') break;
-            os << "Please input the course ID, student ID, and new score:" << endl;
-            continue;
+            if (!process_error(err)) break;
         }
     }
 }

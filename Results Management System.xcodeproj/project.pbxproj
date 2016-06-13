@@ -11,6 +11,9 @@
 		580E595D1CFAD7880071F240 /* person.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 580E595B1CFAD7880071F240 /* person.cpp */; };
 		580E59601CFAE5A80071F240 /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 580E595E1CFAE5A80071F240 /* system.cpp */; };
 		580E59641CFAF00A0071F240 /* course.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 580E59621CFAF00A0071F240 /* course.cpp */; };
+		582ABB661D0EA36300F9E0FC /* client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 582ABB641D0EA36300F9E0FC /* client.cpp */; };
+		58310D7D1D0EBFE300435A97 /* global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58310D7C1D0EBFE300435A97 /* global.cpp */; };
+		583C7D9C1D0D89AC00DDA26B /* libboost_system-mt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 583C7D9B1D0D89AC00DDA26B /* libboost_system-mt.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,9 +35,13 @@
 		580E595C1CFAD7880071F240 /* person.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = person.hpp; sourceTree = "<group>"; };
 		580E595E1CFAE5A80071F240 /* system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = system.cpp; sourceTree = "<group>"; };
 		580E595F1CFAE5A80071F240 /* system.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = system.hpp; sourceTree = "<group>"; };
-		580E59611CFAE6D60071F240 /* global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = global.h; sourceTree = "<group>"; };
+		580E59611CFAE6D60071F240 /* global.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = global.hpp; sourceTree = "<group>"; };
 		580E59621CFAF00A0071F240 /* course.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = course.cpp; sourceTree = "<group>"; };
 		580E59631CFAF00A0071F240 /* course.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = course.hpp; sourceTree = "<group>"; };
+		582ABB641D0EA36300F9E0FC /* client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = client.cpp; sourceTree = "<group>"; };
+		582ABB651D0EA36300F9E0FC /* client.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = client.hpp; sourceTree = "<group>"; };
+		58310D7C1D0EBFE300435A97 /* global.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = global.cpp; sourceTree = "<group>"; };
+		583C7D9B1D0D89AC00DDA26B /* libboost_system-mt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libboost_system-mt.dylib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				583C7D9C1D0D89AC00DDA26B /* libboost_system-mt.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +59,7 @@
 		580E59481CF981C50071F240 = {
 			isa = PBXGroup;
 			children = (
+				583C7D9B1D0D89AC00DDA26B /* libboost_system-mt.dylib */,
 				580E59531CF981C50071F240 /* Results Management System */,
 				580E59521CF981C50071F240 /* Products */,
 			);
@@ -68,7 +77,10 @@
 			isa = PBXGroup;
 			children = (
 				580E59541CF981C50071F240 /* main.cpp */,
-				580E59611CFAE6D60071F240 /* global.h */,
+				582ABB651D0EA36300F9E0FC /* client.hpp */,
+				582ABB641D0EA36300F9E0FC /* client.cpp */,
+				580E59611CFAE6D60071F240 /* global.hpp */,
+				58310D7C1D0EBFE300435A97 /* global.cpp */,
 				580E595B1CFAD7880071F240 /* person.cpp */,
 				580E595C1CFAD7880071F240 /* person.hpp */,
 				580E595E1CFAE5A80071F240 /* system.cpp */,
@@ -137,8 +149,10 @@
 			files = (
 				580E59641CFAF00A0071F240 /* course.cpp in Sources */,
 				580E595D1CFAD7880071F240 /* person.cpp in Sources */,
+				58310D7D1D0EBFE300435A97 /* global.cpp in Sources */,
 				580E59551CF981C50071F240 /* main.cpp in Sources */,
 				580E59601CFAE5A80071F240 /* system.cpp in Sources */,
+				582ABB661D0EA36300F9E0FC /* client.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +196,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /Users/Shared/include;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -220,6 +236,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /Users/Shared/include;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
@@ -229,6 +246,11 @@
 		580E59591CF981C50071F240 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib,
+					"$(PROJECT_DIR)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -236,6 +258,11 @@
 		580E595A1CF981C50071F240 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib,
+					"$(PROJECT_DIR)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

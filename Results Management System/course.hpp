@@ -14,7 +14,7 @@
 #include <map>
 
 #include "person.hpp"
-#include "global.h"
+#include "global.hpp"
 
 class Course
 {
