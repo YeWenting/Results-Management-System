@@ -10,25 +10,27 @@
 #define user_interface_hpp
 
 #include <stdio.h>
+#include <string>
 #include "global.hpp"
+#include "network.hpp"
 
 class User_interface
 {
 public:
-    typedef unsigned short int type;
     User_interface() = default;
     ~User_interface() = default;
-    void teacher_serv();
-    void student_serv();
-    bool login();
     void show();
 private:
-    type userType = 0;
+    clientType userType = 0;
     Person_ptr user_ptr;
     Student_ptr stu_ptr;
     Teacher_ptr tea_ptr;
-    static constexpr type isStudent = 1;
-    static constexpr type isTeacher = 2;
+    
+    std::string get_info(Score_mode mode = INCREASE_BY_SCORE);
+    void teacher_serv();
+    void student_serv();
+    void request_login(clientType, size_t, std::string);
+    bool login();
 };
 
 #endif /* user_interface_hpp */

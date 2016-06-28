@@ -29,6 +29,11 @@ Result_system::Result_system()
 {
     ifstream stu_file("student.txt"), tea_file("teacher.txt"), require_file("require_course.txt"), elective_file("elective_course.txt");
     
+    if (!stu_file || !tea_file || !require_file || !elective_file)
+    {
+        throw std::invalid_argument("Data file is missing.");
+    }
+    
     while (!stu_file.eof())
     {
         auto temp = std::make_shared<Student>();

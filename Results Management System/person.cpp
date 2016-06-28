@@ -32,7 +32,7 @@ std::istream &operator>> (std::istream &is, Student &p)
 {
     
     is >> p.id >> p.password >> p.name >> p.college >> p.classNum;
-    is.ignore();            //忽略\n
+    is.ignore();            //ignore the \n
     
     string s;
     getline(is, s);
@@ -47,7 +47,7 @@ std::istream &operator>> (std::istream &is, Teacher &p)
 {
     
     is >> p.id >> p.password >> p.name >> p.college;
-    is.ignore();            //忽略\n
+    is.ignore();            //ignore the \n
     
     string s;
     getline(is, s);
@@ -69,7 +69,9 @@ std::ostream& operator<<(std::ostream &os, const Teacher &t)
     os << t.name << '\t' << t.id << '\t' << t.college << '\t';
     return os;
 }
-
+/*
+  store the data to the "student.txt" and destory the student
+*/
 Student::~Student()
 {
     using std::endl;
@@ -146,7 +148,6 @@ void Student::cancel_course()
 const Person& Student::display_info(std::ostream &os, const Score_mode &mode)
 {
     using std::endl;
-    system("clear");
     os << "\n\nHello student " << name << ", here is your basic info:)\nName: " << name << "\nID: " << id << "\nClass: " << classNum << "\nCollege: " << college << "\nCourses to attend: " << endl;
     
     Result_system &system = Result_system::get_instance();
@@ -175,7 +176,9 @@ const Person& Student::display_course(std::ostream &os) const
     system.print_available_course(*this, std::cout);
     return *this;
 }
-
+/*
+  store the data to the "teacher.txt" and destory the teacher
+*/
 Teacher::~Teacher()
 {
     using std::endl;
@@ -189,12 +192,13 @@ Teacher::~Teacher()
     }
     course.clear();
 }
-
+/*
+  display the teacher's basic info
+*/
 const Person& Teacher::display_info(std::ostream &os, const Score_mode &mode)
 {
     using std::endl;
     
-    system("clear");
     os << "\n\nDear Porf." << name << ", here is your basic info:)\nID: " << id << "\nCollege: " << college << "\nCourses to teach: " << endl;
     
     Result_system & system = Result_system::get_instance();

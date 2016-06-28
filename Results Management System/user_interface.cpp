@@ -15,6 +15,8 @@
 #include "system.hpp"
 #include "user_interface.hpp"
 #include "global.hpp"
+#include "csapp.h"
+#include "network.hpp"
 
 void User_interface::show()
 {
@@ -31,6 +33,7 @@ void User_interface::show()
         
         if (login() == true)
         {
+            cout << get_info() << endl;
             if (userType == isStudent)
                 student_serv();
             else
@@ -39,6 +42,42 @@ void User_interface::show()
         else break;
     }
     cout << "\n\nThanks for using, goodbye:)" << endl;
+}
+
+std::string User_interface::get_info(Score_mode mode)
+{
+    std::cout << "send info request!" << std::endl;
+    Request_info req;
+    req.type = GET_INFO;
+    Rio_writen(userSock, &req, sizeof(req));
+    Rio_writen(userSock, &mode, sizeof(mode));
+    
+//    char content[MAX_CONTENT_LENGTH];
+//    std::cout << Rio_readn(userSock, content, MAX_CONTENT_LENGTH) << std::endl;
+//    std::cout << content;
+    std::string content;
+    std::cout << Rio_readn(userSock, &content, MAX_CONTENT_LENGTH) << std::endl;
+    return content;
+}
+
+void User_interface::request_login(clientType loginType, size_t id, std::string password)
+{
+    Request_info req;
+    req.type = LOGIN;
+    
+    Rio_writen(userSock, &req, sizeof(req));
+//    loginType += 1;
+    Rio_writen(userSock, &loginType, sizeof(loginType));
+    Rio_writen(userSock, &id, sizeof(id));
+    Rio_writen(userSock, &password, MAX_PASSWORD_LENGTH);
+    
+//    std::string s;
+//    Rio_readn(userSock, &s, 20);
+//    std::cout << s << std::endl;
+    Message mes;
+    Rio_readn(userSock, &mes, sizeof(mes));
+    // login successfully will return a ack >= 0
+    if (mes.ack < 0) throw std::invalid_argument("Your id/password is incorrect.");
 }
 
 bool User_interface::login()
@@ -60,9 +99,7 @@ bool User_interface::login()
             std::string password;
             cout << "\nPlease input your ID and password in ONE LINE" << endl;
             cin >> userId >> password;
-            user_ptr = system.get_person(userId);
-            if (!user_ptr->authorize(password))
-                throw invalid_argument("Your id/password is incorrect.");
+            request_login(userType, userId, password);
             return RIGHT;
         }
         catch (std::invalid_argument err)
@@ -75,7 +112,7 @@ bool User_interface::login()
 
 void User_interface::student_serv()
 {
-    type query, order = INCREASE_BY_SCORE;
+    unsigned short int query, order = INCREASE_BY_SCORE;
     Result_system &system = Result_system::get_instance();
     using namespace std;
     
@@ -112,7 +149,7 @@ void User_interface::student_serv()
 
 void User_interface::teacher_serv()
 {
-    type query, order;
+    unsigned short int query, order;
     using namespace std;
     
     tea_ptr = std::dynamic_pointer_cast<Teacher> (user_ptr);

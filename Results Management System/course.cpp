@@ -99,7 +99,7 @@ bool Require_course::display(std::ostream &os, const int &x) const
     if (x == NO_REQUIRED) return WRONG;
     else
     {
-        os << get_id() << '\t' << get_name() << "\tRequired\t" << system.get_person(get_teacher())->get_name() << '\t' << get_credit();
+        os << get_id() << get_name() << "\tRequired\t" << system.get_person(get_teacher())->get_name() << '\t' << get_credit();
         return RIGHT;
     }
 }
@@ -138,7 +138,9 @@ inline void Elective_course::enroll_student(const Person::seq &x)
         throw std::invalid_argument("You have already been in this class.");
     studentScore.insert(std::make_pair(x, NO_GREADE));
 }
-
+/*
+  print the score table with specified order
+*/
 void Course::print_score_table(std::ostream &os, const Score_mode &mode) const
 {
     Result_system &system = Result_system::get_instance();
