@@ -48,13 +48,6 @@ Result_system::Result_system()
         if (tea_file) num_to_person.insert(make_pair(temp->get_id(), temp));
     }
     
-    //teacher 多了一个
-//    std::cout << "haha" << std::endl;
-//    for (auto i = num_to_person.begin(); i != num_to_person.end(); ++i)
-//    {
-//        std::cout << i->first << ' ' << i->second->get_name() << std::endl;
-//    }
-    
     while (!require_file.eof())
     {
         auto temp = std::make_shared<Require_course>();
@@ -68,12 +61,6 @@ Result_system::Result_system()
         elective_file >> *temp;
         if (elective_file) num_to_course.insert(make_pair(temp->get_id(), temp));
     }
-    
-//    std::cout << "haha" << std::endl;
-//    for (auto i = num_to_elective.begin(); i != num_to_elective.end(); ++i)
-//    {
-//        std::cout << i->first << ' ' << i->second->get_name() << std::endl;
-//    }
 }
 
 Result_system::~Result_system()

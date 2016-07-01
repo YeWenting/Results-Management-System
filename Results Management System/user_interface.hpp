@@ -26,11 +26,19 @@ private:
     Student_ptr stu_ptr;
     Teacher_ptr tea_ptr;
     
-    std::string get_info(Score_mode mode = INCREASE_BY_SCORE);
+/* the interface to the user */
+    bool login();
     void teacher_serv();
     void student_serv();
-    void request_login(clientType, size_t, std::string);
-    bool login();
+    
+/* to send the user's request */
+    void do_display_info(Score_mode mode = INCREASE_BY_SCORE);
+    void do_print_elective_course();
+    void do_attend_course();
+    void do_cancel_course();
+    void do_check_score();
+    void do_modify_score();
+    void do_login(clientType, size_t, std::string);
 };
 
 #endif /* user_interface_hpp */

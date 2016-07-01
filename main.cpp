@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <ctime>
 #include <sys/ioctl.h>
 
 #include "csapp.h"
@@ -18,11 +19,9 @@
 #include "system.hpp"
 #include "server.hpp"
 
-
-
 int main(int argc, const char * argv[])
 {
-    Server myServer;
+    Server myServer(argc, argv);
     myServer.run();
     return 0;
 }

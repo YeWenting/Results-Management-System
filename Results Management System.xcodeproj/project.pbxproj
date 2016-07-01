@@ -113,18 +113,13 @@
 		583C45F91D10F8BE00128719 /* Results Management System */ = {
 			isa = PBXGroup;
 			children = (
-				583C46011D1100CE00128719 /* server */,
-				583C46021D1100DD00128719 /* client */,
 				580E59611CFAE6D60071F240 /* global.hpp */,
+				58310D7C1D0EBFE300435A97 /* global.cpp */,
 				58B5AED31D119CE800B6D79E /* network.hpp */,
 				58B5AED41D119E6300B6D79E /* network.cpp */,
-				58310D7C1D0EBFE300435A97 /* global.cpp */,
-				580E595B1CFAD7880071F240 /* person.cpp */,
-				580E595C1CFAD7880071F240 /* person.hpp */,
-				580E595E1CFAE5A80071F240 /* system.cpp */,
-				580E595F1CFAE5A80071F240 /* system.hpp */,
-				580E59621CFAF00A0071F240 /* course.cpp */,
-				580E59631CFAF00A0071F240 /* course.hpp */,
+				583C46011D1100CE00128719 /* server */,
+				583C46021D1100DD00128719 /* client */,
+				5873E2611D2655BA00898177 /* Class implementation */,
 			);
 			name = "Results Management System";
 			sourceTree = "<group>";
@@ -149,6 +144,19 @@
 				582ABB641D0EA36300F9E0FC /* user_interface.cpp */,
 			);
 			name = client;
+			sourceTree = "<group>";
+		};
+		5873E2611D2655BA00898177 /* Class implementation */ = {
+			isa = PBXGroup;
+			children = (
+				580E595C1CFAD7880071F240 /* person.hpp */,
+				580E595B1CFAD7880071F240 /* person.cpp */,
+				580E595F1CFAE5A80071F240 /* system.hpp */,
+				580E595E1CFAE5A80071F240 /* system.cpp */,
+				580E59631CFAF00A0071F240 /* course.hpp */,
+				580E59621CFAF00A0071F240 /* course.cpp */,
+			);
+			name = "Class implementation";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

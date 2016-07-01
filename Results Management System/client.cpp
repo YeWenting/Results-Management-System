@@ -11,26 +11,26 @@
 #include "global.hpp"
 #include "user_interface.hpp"
 #include "network.hpp"
+#include "csapp.h"
 
 int userSock;
 
 int main(int argc, const char * argv[])
 {
     User_interface window;
-    userSock = Open_clientfd("127.0.0.1", port);
+    
+    /* Check arguments */
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s <server IP> <server port>\n", argv[0]);
+        exit(0);
+    }
+    
+    /* connect to the server */
+    int port = atoi(argv[2]);
+    char addr[20];
+    strcpy(addr, argv[1]);
+    userSock = Open_clientfd(addr, port);
     
     window.show();
     return 0;
 }
-//
-//int main(int argc, const char * argv[])
-//{
-//    int sock = Open_clientfd("127.0.0.1", port);
-//    char s[10] = "1";
-//    int x = sizeof(s);
-//    Rio_writen(sock, s, sizeof(s));
-//    printf("%d\n", x);
-//    while (1);
-//    Close(sock);
-//    return 0;
-//}

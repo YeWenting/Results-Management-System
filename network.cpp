@@ -8,28 +8,68 @@
 
 #include <stdio.h>
 #include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <string>
+#include <sstream>
 
 #include "network.hpp"
 #include "csapp.h"
 
 /*
-    receive the "request" and "message" packet
+ send the "request" packet
 */
-void recv_request(int fd, Request_info &req)
+void send_request(int fd, unsigned short int t)
 {
-    Rio_readn(fd, &req, sizeof(req));
+    Request_info req;
+    req = t;
+    Rio_writen(fd, &req, sizeof(req));
+}
+
+
+void recv_message(int fd, std::ostream &os)
+{
+    Message mes;
+    Rio_readn(fd, &mes, sizeof(Message));
+    if (mes.ack < 0) throw std::invalid_argument(mes.content);
+    else os << mes.content <<std::endl;
 }
 
 /*
   send the "message" packet
 */
-void send_message(int &fd, const char *content)
+void send_message(int fd, const char *content)
 {
     Message mes;
     if (content == NULL) mes.ack = -1;
     else mes.ack = 0;
     strcpy(mes.content, content);
     Rio_writen(fd, &mes, sizeof(mes));
+}
+
+void send_message(int fd, std::stringstream &os)
+{
+    Message mes;
+    strcpy(mes.content, os.str().c_str());
+    
+    Rio_writen(fd, &mes, sizeof(mes));
+}
+
+void send_error(int fd, const char *s)
+{
+    Message error;
+    error.ack = -1;
+    strcpy(error.content, s);
+    Rio_writen(fd, &error, sizeof(error));
+}
+
+/*
+ send a string from stringstream
+*/
+static void send_sstream(int fd, std::stringstream &os)
+{
+    char s[MAX_CONTENT_LENGTH];
+    strcpy(s, os.str().c_str());
+    Rio_writen(fd, s, MAX_CONTENT_LENGTH);
 }
 
 bool isclosed(int sock) {

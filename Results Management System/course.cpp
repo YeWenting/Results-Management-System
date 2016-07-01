@@ -99,7 +99,7 @@ bool Require_course::display(std::ostream &os, const int &x) const
     if (x == NO_REQUIRED) return WRONG;
     else
     {
-        os << get_id() << get_name() << "\tRequired\t" << system.get_person(get_teacher())->get_name() << '\t' << get_credit();
+        os << get_id() << '\t' << get_name() << "\tRequired\t" << system.get_person(get_teacher())->get_name() << '\t' << get_credit();
         return RIGHT;
     }
 }
@@ -152,7 +152,6 @@ void Course::print_score_table(std::ostream &os, const Score_mode &mode) const
     else
         sort(myScore.begin(), myScore.end(), [](const pair<seq, score> &a, const pair<seq, score> &b)
              { return a.second > b.second; });
-    
     for (auto u : myScore)
     {
         Person_ptr p = system.get_person(u.first);

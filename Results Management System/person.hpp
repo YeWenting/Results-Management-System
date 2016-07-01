@@ -48,8 +48,8 @@ public:
     virtual ~Student();
     
     virtual const Person &display_info(std::ostream&, const Score_mode& = INCREASE_BY_SCORE) override final;
-    void enroll_course();
-    void cancel_course();
+    std::string enroll_course(long);
+    std::string cancel_course(long);
     const Person& display_course(std::ostream&) const;
 private:
     unsigned int classNum = 0;
@@ -66,8 +66,8 @@ public:
     virtual ~Teacher();
     virtual const Person &display_info(std::ostream&, const Score_mode& = INCREASE_BY_SCORE) override final;
 //    virtual void storage() override final;
-    void modify_score(std::istream &, std::ostream &);  //course student score
-    void check_score(std::istream &, std::ostream &, const Score_mode&) const;
+    void modify_score(std::ostream&, long, Person::seq, unsigned short);
+    void check_score(long, std::ostream &, const Score_mode&) const;
 };
 
 #endif /* people_hpp */
