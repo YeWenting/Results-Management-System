@@ -215,21 +215,14 @@ void Server::do_login(int fd)
     Rio_readn(fd, &type, sizeof(type));
     Rio_readn(fd, &id, sizeof(id));
     Rio_readn(fd, &password, MAX_PASSWORD_LENGTH);
-    
-    try
-    {
-        Person_ptr user_ptr = system.get_person(id);
-        if (!user_ptr->authorize(password))
-            throw std::invalid_argument("Your id/password is incorrect.");
-        client[fd].status = type;
-        client[fd].data = user_ptr;
-        Message mes;
-        Rio_writen(fd, &mes, sizeof(mes));
-    }
-    catch (std::invalid_argument err)
-    {
-        send_error(fd, err.what());
-    }
+
+    Person_ptr user_ptr = system.get_person(id);
+    if (!user_ptr->authorize(password))
+        throw std::invalid_argument("Your id/password is incorrect.");
+    client[fd].status = type;
+    client[fd].data = user_ptr;
+    Message mes;
+    Rio_writen(fd, &mes, sizeof(mes));
 }
 
 void Server::do_get_info(int userID)
