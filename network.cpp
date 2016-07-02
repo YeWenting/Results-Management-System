@@ -62,16 +62,6 @@ void send_error(int fd, const char *s)
     Rio_writen(fd, &error, sizeof(error));
 }
 
-/*
- send a string from stringstream
-*/
-static void send_sstream(int fd, std::stringstream &os)
-{
-    char s[MAX_CONTENT_LENGTH];
-    strcpy(s, os.str().c_str());
-    Rio_writen(fd, s, MAX_CONTENT_LENGTH);
-}
-
 bool isclosed(int sock) {
     fd_set rfd;
     FD_ZERO(&rfd);
