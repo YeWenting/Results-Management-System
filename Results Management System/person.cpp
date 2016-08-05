@@ -37,8 +37,8 @@ std::istream &operator>> (std::istream &is, Student &p)
     string s;
     getline(is, s);
     std::stringstream record(s);
-    std::istream_iterator<Person::seq> in_iter(record), eof;
-    p.course = vector<Person::seq> (in_iter, eof);
+    std::istream_iterator<Shared::Course> in_iter(record), eof;
+    p.course = vector<Shared::Course> (in_iter, eof);
     
     return is;
 }
@@ -52,8 +52,8 @@ std::istream &operator>> (std::istream &is, Teacher &p)
     string s;
     getline(is, s);
     std::stringstream record(s);
-    std::istream_iterator<Person::seq> in_iter(record), eof;
-    p.course = vector<Person::seq> (in_iter, eof);
+    std::istream_iterator<Shared::Course> in_iter(record), eof;
+    p.course = vector<Shared::Course> (in_iter, eof);
     
     return is;
 }
@@ -87,7 +87,7 @@ Student::~Student()
     course.clear();
 }
 
-std::string Student::enroll_course(Course::seq courseNum)
+std::string Student::enroll_course(Shared::Course courseNum)
 {
     Result_system &system = Result_system::get_instance();
     
@@ -97,7 +97,7 @@ std::string Student::enroll_course(Course::seq courseNum)
     return enrollCourse->get_name();
 }
 
-std::string Student::cancel_course(Course::seq courseNum)
+std::string Student::cancel_course(Shared::Course courseNum)
 {
     Result_system &system = Result_system::get_instance();
     Course_ptr cancelCourse = system.get_course(courseNum);
@@ -117,10 +117,10 @@ const Person& Student::display_info(std::ostream &os, const Score_mode &mode)
     Result_system &system = Result_system::get_instance();
     //输出基本信息
     if (mode == INCREASE_BY_SCORE)
-        sort(course.begin(), course.end(), [&system, this](const seq &a, const seq &b)
+        sort(course.begin(), course.end(), [&system, this](const Shared::Course &a, const Shared::Course &b)
              { return system.get_course(a)->get_score(this->id) < system.get_course(b)->get_score(this->id); });
     else
-        sort(course.begin(), course.end(), [&system, this](const seq &a, const seq &b)
+        sort(course.begin(), course.end(), [&system, this](const Shared::Course &a, const Shared::Course &b)
              { return system.get_course(a)->get_score(this->id) > system.get_course(b)->get_score(this->id); });
     
     for (auto u : course)
@@ -177,8 +177,8 @@ const Person& Teacher::display_info(std::ostream &os, const Score_mode &mode)
     return *this;
 }
 
-void Teacher::modify_score(std::ostream &os, Course::seq course,
-                           Person::seq student, Course::score newScore)
+void Teacher::modify_score(std::ostream &os, Shared::Course course,
+                           seq student, Shared::score newScore)
 {
     Result_system &system = Result_system::get_instance();
     Course_ptr myCourse = system.get_course(course);
@@ -194,7 +194,7 @@ void Teacher::modify_score(std::ostream &os, Course::seq course,
     myCourse->print_score_table(os, INCREASE_BY_SCORE);
 }
 
-void Teacher::check_score(Course::seq courseNum, std::ostream &os, const Score_mode &mode) const
+void Teacher::check_score(Shared::Course courseNum, std::ostream &os, const Score_mode &mode) const
 {
     Result_system &system = Result_system::get_instance();
     

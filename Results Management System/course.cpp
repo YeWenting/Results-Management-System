@@ -38,7 +38,7 @@ istream& operator>>(istream &is, Course &c)
     std::stringstream record(s);
     while (!record.eof())
     {
-        Student::seq x;
+        Shared::Person x;
         score y;
         record >> x >> y;
         c.studentScore.insert(std::make_pair(x, y));
@@ -114,12 +114,12 @@ bool Elective_course::display(std::ostream &os, const int &x) const
     return RIGHT;
 }
 
-inline void Require_course::throw_student(const Person::seq &x)
+inline void Require_course::throw_student(const Shared::Person &x)
 {
     throw std::invalid_argument("You must attend a REQUIRED course.");
 }
 
-inline void Elective_course::throw_student(const Person::seq &x)
+inline void Elective_course::throw_student(const Shared::Person &x)
 {
     auto stu_it = studentScore.find(x);
     if (stu_it == studentScore.end())
@@ -127,12 +127,12 @@ inline void Elective_course::throw_student(const Person::seq &x)
     studentScore.erase(stu_it);
 }
 
-inline void Require_course::enroll_student(const Person::seq &x)
+inline void Require_course::enroll_student(const Shared::Person &x)
 {
     throw std::invalid_argument("You cannot choose a REQUIRED course.");
 }
 
-inline void Elective_course::enroll_student(const Person::seq &x)
+inline void Elective_course::enroll_student(const Shared::Person &x)
 {
     auto stu_it = studentScore.find(x);
     if (stu_it != studentScore.end())

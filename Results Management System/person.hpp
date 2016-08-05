@@ -21,9 +21,10 @@ class Teacher;
 class Person
 {
 public:
-    typedef size_t seq ;
+    using seq = Shared::Person;
+    using cou = Shared::Course;
     Person() = default;
-    Person(const seq& i, const std::string &n, const std::string &cl, std::vector <seq> &co, const std::string &pa):
+    Person(const seq& i, const std::string &n, const std::string &cl, std::vector <cou> &co, const std::string &pa):
         id(i), name(n), college(cl), course(co), password(pa) {};
     virtual ~Person() = default;
     seq get_id() const { return id; };
@@ -34,7 +35,7 @@ public:
 protected:
     seq id = 0;
     std::string name, college, password;
-    std::vector <seq> course;
+    std::vector <Shared::Course> course;
 };
 
 
@@ -48,8 +49,8 @@ public:
     virtual ~Student();
     
     virtual const Person &display_info(std::ostream&, const Score_mode& = INCREASE_BY_SCORE) override final;
-    std::string enroll_course(long);
-    std::string cancel_course(long);
+    std::string enroll_course(Shared::Course);
+    std::string cancel_course(Shared::Course);
     const Person& display_course(std::ostream&) const;
 private:
     unsigned int classNum = 0;
@@ -66,8 +67,8 @@ public:
     virtual ~Teacher();
     virtual const Person &display_info(std::ostream&, const Score_mode& = INCREASE_BY_SCORE) override final;
 //    virtual void storage() override final;
-    void modify_score(std::ostream&, long, Person::seq, unsigned short);
-    void check_score(long, std::ostream &, const Score_mode&) const;
+    void modify_score(std::ostream&, Shared::Course, seq, Shared::score);
+    void check_score(Shared::Course, std::ostream &, const Score_mode&) const;
 };
 
 #endif /* people_hpp */

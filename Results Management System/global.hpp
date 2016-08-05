@@ -37,4 +37,11 @@ constexpr Score_mode DECREASE_BY_SCORE = 1;
 
 bool process_error(std::invalid_argument);
 
+namespace Shared
+{
+    typedef size_t Person;
+    typedef unsigned long Course;
+    typedef unsigned short score;
+}
+
 #endif /* global_h */
