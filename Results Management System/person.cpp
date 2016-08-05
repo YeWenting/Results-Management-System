@@ -12,7 +12,7 @@
 #include <iostream>
 #include <string>
 #include <iterator>
-#include <curses.h>
+#include <algorithm>
 
 #include "person.hpp"
 #include "global.hpp"

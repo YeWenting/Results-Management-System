@@ -15,6 +15,7 @@
 #include <utility>
 #include <numeric>
 #include <cmath>
+#include <algorithm>
 
 #include "course.hpp"
 #include "system.hpp"

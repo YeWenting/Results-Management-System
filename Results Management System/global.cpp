@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <limits>
 
 #include "global.hpp"
 

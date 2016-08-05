@@ -2,234 +2,308 @@
 //  server.cpp
 //  Results Management System
 //
-//  Created by YeWenting. on 16/6/15.
+//  Created by YeWenting. on 16/6/17.
 //  Copyright © 2016年 School of Computer Science. All rights reserved.
 //
-#define PORT 1234
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <iostream>
+#include <sstream>
+#include <stdio.h>
+#include <sys/ioctl.h>
 
 #include "csapp.h"
+#include "global.hpp"
+#include "network.hpp"
+#include "person.hpp"
+#include "system.hpp"
+#include "server.hpp"
+#include "course.hpp"
+#include <cstring>
 
-int main(){
-    //创建套接字
-    int serv_sock = open_listenfd(PORT);
+Server::Server(int argc, const char *argv[])
+{
+    unsigned short port;
     
-    struct sockaddr_in clnt_addr;
-    socklen_t clnt_addr_size = sizeof(clnt_addr);
-    int clnt_sock = accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_size);
+    /* Check arguments */
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <port number>\n", argv[0]);
+        exit(0);
+    }
     
-    char str[] = "Hello World!";
-    write(clnt_sock, str, sizeof(str));
+    port = atoi(argv[1]);
+    listenSock = Open_listenfd(port);
+    start_time = time(NULL);
+    log_file.open("server.log");
+    std::cout << "Results management system have started..." << std::endl;
     
-    close(clnt_sock);
-    close(serv_sock);
-    return 0;
+    maxfd = listenSock + 1;
+    FD_ZERO(&fds);
+    FD_SET(listenSock, &fds);
+    client = std::vector <Client_info>(100);
 }
 
+Server::~Server()
+{
+    client.clear();
+    log_file.close();
+}
 
-//#include <sys/time.h>
-//#include <sys/types.h>
-//#include <unistd.h>
-//#include <sys/ioctl.h>
-//#include <netdb.h>
-//#include <thread>
-//
-//bool isclosed(int sock) {
-//    fd_set rfd;
-//    FD_ZERO(&rfd);
-//    FD_SET(sock, &rfd);
-//    timeval tv = { 0 };
-//    select(sock+1, &rfd, 0, 0, &tv);    //判断fd状态是否可读
-//    if (!FD_ISSET(sock, &rfd))
-//        return false;
-//    int n = 0;
-//    ioctl(sock, FIONREAD, &n);          //判断fd还有东西读吗
-//    return n == 0;
-//}
-//
-//int make_accept_sock (const char *servspec) {
-//    const int one = 1;
-//    struct addrinfo hints = {};
-//    struct addrinfo *res = 0, *ai = 0, *ai4 = 0;
-//    char *node = strdup(servspec);
-//    char *service = strrchr(node, ':');
-//    int sock;
-//
-//    hints.ai_family = PF_UNSPEC;
-//    hints.ai_socktype = SOCK_STREAM;
-//    hints.ai_flags = AI_PASSIVE;
-//
-//    *service++ = '\0';
-//    getaddrinfo(*node ? node : "0::0", service, &hints, &res);
-//    free(node);
-//
-//    for (ai = res; ai; ai = ai->ai_next) {
-//        if (ai->ai_family == PF_INET6) break;
-//        else if (ai->ai_family == PF_INET) ai4 = ai;
-//    }
-//    ai = ai ? ai : ai4;
-//
-//    sock = socket(ai->ai_family, SOCK_STREAM, 0);
-//    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
-//    bind(sock, ai->ai_addr, ai->ai_addrlen);
-//    listen(sock, 256);
-//    freeaddrinfo(res);
-//
-//    return sock;
-//}
-//
-//void new_connection (int sock) {
-//    ssize_t r;
-//    while (!isclosed(sock)) {
-//        r = send(sock, ".\n", 2, 0);
-//        if (r < 0) break;
-//        sleep(1);
-//    }
-//    close(sock);
-//}
-//
-//void accept_loop (const char *servspec) {
-//    int sock = make_accept_sock(servspec);
-//
-//    for (;;) {
-//        int new_sock = accept(sock, 0, 0);
-//        std::thread t(new_connection, new_sock);
-//        t.detach();
-//    }
-//}
-////
-//#include <cstdlib>
-//#include <iostream>
-//#include <boost/bind.hpp>
-//#include <boost/asio.hpp>
-//
-//using boost::asio::ip::tcp;
-//
-//class session
-//{
-//public:
-//    session(boost::asio::io_service& io_service)
-//    : socket_(io_service)
-//    {
-//    }
-//
-//    tcp::socket& socket()
-//    {
-//        return socket_;
-//    }
-//
-//    void start()
-//    {
-//        socket_.async_read_some(boost::asio::buffer(data_, max_length),
-//                                boost::bind(&session::handle_read, this,
-//                                            boost::asio::placeholders::error,
-//                                            boost::asio::placeholders::bytes_transferred));
-//    }
-//
-//private:
-//    void handle_read(const boost::system::error_code& error,
-//                     size_t bytes_transferred)
-//    {
-//        if (!error)
-//        {
-//            boost::asio::async_write(socket_,
-//                                     boost::asio::buffer(data_, bytes_transferred),
-//                                     boost::bind(&session::handle_write, this,
-//                                                 boost::asio::placeholders::error));
-//        }
-//        else
-//        {
-//            delete this;
-//        }
-//    }
-//
-//    void handle_write(const boost::system::error_code& error)
-//    {
-//        if (!error)
-//        {
-//            socket_.async_read_some(boost::asio::buffer(data_, max_length),
-//                                    boost::bind(&session::handle_read, this,
-//                                                boost::asio::placeholders::error,
-//                                                boost::asio::placeholders::bytes_transferred));
-//        }
-//        else
-//        {
-//            delete this;
-//        }
-//    }
-//
-//    tcp::socket socket_;
-//    enum { max_length = 1024 };
-//    char data_[max_length];
-//};
-//
-//class server
-//{
-//public:
-//    server(boost::asio::io_service& io_service, short port)
-//    : io_service_(io_service),
-//    acceptor_(io_service, tcp::endpoint(tcp::v4(), port))
-//    {
-//        start_accept();
-//    }
-//
-//private:
-//    void start_accept()
-//    {
-//        session* new_session = new session(io_service_);
-//        acceptor_.async_accept(new_session->socket(),
-//                               boost::bind(&server::handle_accept, this, new_session,
-//                                           boost::asio::placeholders::error));
-//    }
-//
-//    void handle_accept(session* new_session,
-//                       const boost::system::error_code& error)
-//    {
-//        if (!error)
-//        {
-//            new_session->start();
-//        }
-//        else
-//        {
-//            delete new_session;
-//        }
-//
-//        start_accept();
-//    }
-//
-//    boost::asio::io_service& io_service_;
-//    tcp::acceptor acceptor_;
-//};
-//
-//int main(int argc, char* argv[])
-//{
-//    try
-//    {
-//        if (argc != 2)
-//        {
-//            std::cerr << "Usage: async_tcp_echo_server <port>\n";
-//            return 1;
-//        }
-//
-//        boost::asio::io_service io_service;
-//
-//        using namespace std; // For atoi.
-//        server s(io_service, atoi(argv[1]));
-//
-//        io_service.run();
-//    }
-//    catch (std::exception& e)
-//    {
-//        std::cerr << "Exception: " << e.what() << "\n";
-//    }
-//
-//    return 0;
-//}
+/******************************************
+ * Wrappers for the server basic routines
+ ******************************************/
+
+void Server::run()
+{
+    
+    while (1)
+    {
+        memcpy(&rfds, &fds, sizeof(fds));
+        if (Select(maxfd, &rfds, 0, 0, NULL) <= 0) break;
+        
+        // A new client
+        if (FD_ISSET(listenSock, &rfds))
+        {
+            dataSock = Accept(listenSock, 0, 0);
+            FD_SET(dataSock, &fds);
+            if (maxfd <= dataSock) maxfd = dataSock + 1;
+            client[dataSock].status = NO_LOGIN;
+        }
+        for (int fd = 0; fd < maxfd; fd++)
+        {
+            if (fd !=listenSock && FD_ISSET(fd, &rfds))
+            {
+                if (isclosed(fd))
+                {
+                    Close(fd);
+                    FD_CLR(fd, &fds);
+                    client[fd].status = NO_LOGIN;
+                }
+                else receive_data(fd);
+            }
+        }
+    }
+    Close(listenSock);
+    Close(dataSock);
+}
+
+int Server::receive_data(int sock)
+{
+    Request_info req;
+    recv_request(sock, &req);
+    
+    try
+    {
+        /* Check the authenrization */
+        if (!authenrize(sock, req))
+            throw std::invalid_argument("You have no right to do this.");
+        
+        /* Process the requirement */
+        switch (req)
+        {
+            case LOGIN:
+                do_login(sock);
+                break;
+            case PRINT_SCORE_TABLE:
+                do_check_score(sock);
+                break;
+            case ATTEND_COURSE:
+                do_attend_course(sock);
+                break;
+            case CANCEL_COURSE:
+                do_cancel_course(sock);
+                break;
+            case PRINT_ELECTIVE_COURSE:
+                do_print_elective_course(sock);
+                break;
+            case MODIFY_SCORE:
+                do_modify_score(sock);
+                break;
+            case GET_INFO:
+                do_get_info(sock);
+                break;
+        }
+    }
+    catch (std::invalid_argument err)
+    {
+        send_error(sock, err.what());
+    }
+    return 1;
+}
+
+void Server::log_event(std::ostream &os, Request_info req, sockaddr_in peer, socklen_t name_len)
+{
+    std::string s;
+    switch (req)
+    {
+        case LOGIN:
+            s = "LOGIN";
+            break;
+        case GET_INFO:
+            s = "GET_INFO";
+            break;
+        case PRINT_ELECTIVE_COURSE:
+            s = "PRINT_ELECTIVE_COURSE";
+            break;
+        case ATTEND_COURSE:
+            s = "ATTEND_COURSE";
+            break;
+        case CANCEL_COURSE:
+            s = "CANCEL_COURSE";
+            break;
+        case PRINT_SCORE_TABLE:
+            s = "PRINT_SCORE_TABLE";
+            break;
+        case MODIFY_SCORE:
+            s = "MODIFY_SCORE";
+            break;
+        default:
+            s = "BAD_REQUEST";
+            break;
+    }
+    os << (int)(time(NULL) - start_time) << "s Recv a request form " << inet_ntoa(peer.sin_addr) << ":" << ntohs(peer.sin_port) << "\nRequest for: " << s.c_str() << std::endl << std::endl ;
+}
+
+/*
+ receive the "request" packet
+ */
+void Server::recv_request(int fd, Request_info *req)
+{
+    sockaddr_in peer;
+    socklen_t name_len = sizeof(peer);
+    
+    /* Recv the request */
+    recvfrom(fd, req, sizeof(Request_info), 0, (sockaddr *)&peer, &name_len);
+    
+    /* log the request */
+    log_event(std::cout, *req, peer, name_len);
+    log_event(log_file, *req, peer, name_len);
+}
+
+/******************************************
+ * Wrappers for the request processing routines
+ ******************************************/
+
+bool Server::authenrize(int userID, Request_info type)
+{
+    int clientType = client[userID].status;
+    
+    /* For un-register user, they can only login*/
+    if (clientType == NO_LOGIN)
+    {
+        if (type == LOGIN) return true;
+        else return false;
+    }
+    
+    /* get info is ok for both teacher and student */
+    if (type <= GET_INFO) return true;
+    
+    if (clientType == isStudent && (type <= CANCEL_COURSE))
+        return true;
+    if (clientType == isTeacher && (type >= PRINT_SCORE_TABLE))
+        return true;
+    
+    return false;
+}
+
+void Server::do_login(int fd)
+{
+    Result_system &system = Result_system::get_instance();
+    size_t id;
+    unsigned short int type;
+    std::string password;
+    
+    Rio_readn(fd, &type, sizeof(type));
+    Rio_readn(fd, &id, sizeof(id));
+    Rio_readn(fd, &password, MAX_PASSWORD_LENGTH);
+
+    Person_ptr user_ptr = system.get_person(id);
+    if (!user_ptr->authorize(password))
+        throw std::invalid_argument("Your id/password is incorrect.");
+    client[fd].status = type;
+    client[fd].data = user_ptr;
+    Message mes;
+    Rio_writen(fd, &mes, sizeof(mes));
+}
+
+void Server::do_get_info(int userID)
+{
+    Score_mode mode;
+    Rio_readn(userID, &mode, sizeof(mode));
+    
+    std::stringstream ss;
+    (client[userID].data)->display_info(ss, mode);
+    
+    /*  Send the info message */
+    send_message(userID, ss);
+}
+
+void Server::do_print_elective_course(int userID)
+{
+    Result_system &system = Result_system::get_instance();
+    Student_ptr stu_ptr = std::dynamic_pointer_cast<Student>(client[userID].data);
+    std::stringstream ss;
+    
+    system.print_available_course(*stu_ptr, ss);
+    send_message(userID, ss);
+}
+
+void Server::do_attend_course(int userID)
+{
+    Course::seq courseID;
+    Student_ptr stu_ptr = std::dynamic_pointer_cast<Student>(client[userID].data);
+    Rio_readn(userID, &courseID, sizeof(courseID));
+    
+    std::stringstream ss;
+    ss << "You attend the " << stu_ptr->enroll_course(courseID) << " course successfully." << std::endl;
+    send_message(userID, ss);
+}
+
+void Server::do_cancel_course(int userID)
+{
+    Course::seq courseID;
+    Student_ptr stu_ptr = std::dynamic_pointer_cast<Student>(client[userID].data);
+    
+    /* Recv the request info */
+    Rio_readn(userID, &courseID, sizeof(courseID));
+    
+    /* Send the result */
+    std::stringstream ss;
+    ss << "You cancel the " << stu_ptr->cancel_course(courseID) << " course successfully." << std::endl;
+    send_message(userID, ss);
+}
+
+void Server::do_check_score(int userID)
+{
+    Course::seq courseID;
+    Teacher_ptr tea_ptr = std::dynamic_pointer_cast<Teacher>(client[userID].data);
+    unsigned short int order;
+    
+    /* Recv the request info */
+    Rio_readn(userID, &courseID, sizeof(courseID));
+    Rio_readn(userID, &order, sizeof(order));
+    
+    /* Send the result */
+    std::stringstream ss;
+    tea_ptr->check_score(courseID, ss, order);
+    
+    send_message(userID, ss);
+}
+
+void Server::do_modify_score(int userID)
+{
+    Course::seq courseID;
+    Person::seq student = 0;
+    Course::score newScore = 0;
+    Teacher_ptr tea_ptr = std::dynamic_pointer_cast<Teacher>(client[userID].data);
+    
+    /* Recv the request info */
+    Rio_readn(userID, &courseID, sizeof(courseID));
+    Rio_readn(userID, &student, sizeof(student));
+    Rio_readn(userID, &newScore, sizeof(newScore));
+    
+    /* Send the result */
+    std::stringstream ss;
+    tea_ptr->modify_score(ss, courseID, student, newScore);
+    
+    send_message(userID, ss);
+}
