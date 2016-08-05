@@ -1,5 +1,5 @@
 # Results-Management-System
-This is my work to "C++ Course Design II" in BUPT. 
+This is my work of "C++ Course Design II" in BUPT. 
 
 To develop this system, I designed three esstial classes, called "Person", "Course" and "System". On the purpose of encapsulation and security, I implemented "System" class with singleton pattern, by smart pointer rather than normal pointer, which is concise and effective.
 
