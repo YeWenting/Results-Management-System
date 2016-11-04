@@ -11,8 +11,8 @@
 
 #include <stdio.h>
 #include <string>
-#include "global.hpp"
-#include "network.hpp"
+#include "../Shared/global.hpp"
+#include "../Shared/network.hpp"
 
 class User_interface
 {

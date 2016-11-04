@@ -10,15 +10,15 @@
 #include <sstream>
 #include <stdio.h>
 #include <sys/ioctl.h>
-
-#include "csapp.h"
-#include "global.hpp"
-#include "network.hpp"
-#include "person.hpp"
-#include "system.hpp"
-#include "server.hpp"
-#include "course.hpp"
 #include <cstring>
+
+#include "../Shared/csapp.h"
+#include "../Shared/global.hpp"
+#include "../Shared/network.hpp"
+#include "../Library/person.hpp"
+#include "../Library/system.hpp"
+#include "server.hpp"
+#include "../Library/course.hpp"
 
 Server::Server(int argc, const char *argv[])
 {

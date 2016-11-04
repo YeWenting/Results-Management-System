@@ -15,7 +15,7 @@
 #include <algorithm>
 
 #include "person.hpp"
-#include "global.hpp"
+#include "../Shared/global.hpp"
 #include "course.hpp"
 #include "system.hpp"
 

@@ -12,12 +12,12 @@
 #include <algorithm>
 #include <memory>
 
-#include "system.hpp"
+#include "../Library/system.hpp"
 #include "user_interface.hpp"
-#include "global.hpp"
-#include "csapp.h"
-#include "network.hpp"
-#include "course.hpp"
+#include "../Shared/global.hpp"
+#include "../Shared/csapp.h"
+#include "../Shared/network.hpp"
+#include "../Library/course.hpp"
 
 /**************************************
  * User interface routines

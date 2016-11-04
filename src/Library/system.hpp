@@ -15,7 +15,7 @@
 
 #include "person.hpp"
 #include "course.hpp"
-#include "global.hpp"
+#include "../Shared/global.hpp"
 
 class Result_system
 {

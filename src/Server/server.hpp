@@ -13,8 +13,8 @@
 #include <ctime>
 #include <fstream>
 
-#include "global.hpp"
-#include "network.hpp"
+#include "../Shared/global.hpp"
+#include "../Shared/network.hpp"
 
 constexpr unsigned short int NO_LOGIN = 0;
 constexpr unsigned short int STUDENT = 1;

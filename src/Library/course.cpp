@@ -19,7 +19,7 @@
 
 #include "course.hpp"
 #include "system.hpp"
-#include "global.hpp"
+#include "../Shared/global.hpp"
 
 using std::string;
 using std::istream;

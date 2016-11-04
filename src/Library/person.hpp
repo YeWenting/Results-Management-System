@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-#include "global.hpp"
+#include "../Shared/global.hpp"
 
 class Student;
 class Teacher;

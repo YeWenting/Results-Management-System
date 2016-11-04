@@ -16,7 +16,7 @@
 #include "system.hpp"
 #include "person.hpp"
 #include "course.hpp"
-#include "global.hpp"
+#include "../Shared/global.hpp"
 
 using std::string;
 using std::ifstream;

@@ -12,11 +12,11 @@
 #include <ctime>
 #include <sys/ioctl.h>
 
-#include "csapp.h"
-#include "global.hpp"
-#include "network.hpp"
-#include "person.hpp"
-#include "system.hpp"
+#include "../Shared/csapp.h"
+#include "../Shared/global.hpp"
+#include "../Shared/network.hpp"
+#include "../Library/person.hpp"
+#include "../Library/system.hpp"
 #include "server.hpp"
 
 int main(int argc, const char * argv[])
