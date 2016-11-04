@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 #include "csapp.h"
-#include "global.hpp"
+#include "../Shared/global.hpp"
 #include "user_interface.hpp"
 #include "network.hpp"
 #include "csapp.h"
